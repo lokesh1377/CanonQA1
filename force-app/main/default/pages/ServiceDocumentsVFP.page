@@ -1,0 +1,19 @@
+<apex:page controller="ServiceDocumentsCTR" sidebar="true" showHeader="true" id="pageId" readOnly="true"  LightningStylesheets="true">
+
+    <apex:form id="formId">
+    <apex:messages />
+    <!--apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="pbId" /-->
+    <!--apex:actionFunction name="applyFilter" action="{!resetFilter}" status="fetchStatus" reRender="pbId"/-->
+    
+    <apex:pageBlock >
+        <apex:pageBlockSection title="Documents Type">    
+             <apex:selectList value="{!sdocType}" multiselect="false" size="1" onchange="applyFilter();" label="Document Type">
+                <apex:selectOptions value="{!sdocTypeOptions}"/>
+             </apex:selectList>    
+        </apex:pageBlockSection> 
+    </apex:pageBlock>
+
+
+
+   </apex:form>
+</apex:page>

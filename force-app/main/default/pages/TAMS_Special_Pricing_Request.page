@@ -1,0 +1,2 @@
+<apex:page standardController="TAMS_Special_Pricing_Request__c" recordSetVar="a"
+action="{!URLFOR($Action.TAMS_Special_Pricing_Request__c.List,$ObjectType.TAMS_Special_Pricing_Request__c)}" />

@@ -1,0 +1,6 @@
+<aura:component implements="force:appHostable,force:lightningQuickAction,force:hasRecordId,flexipage:availableForAllPageTypes"  controller="Tams360OppFromLeadExt">
+    <ui:message title="Warning" severity="warning" closable="false">Are you sure to convert this Lead into Opportunity?</ui:message>
+    <ui:button label="Yes" press="{!c.CreateOpportunity}" />
+    <ui:button label="No" press="{!c.goBack}" />
+    <div aura:id="div1"></div>
+</aura:component>

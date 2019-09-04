@@ -1,0 +1,19 @@
+<apex:page controller="MyPreferencesController" lightningStyleSheets="true">
+    <apex:form >
+        <apex:pageBlock title="My Preferences" >
+           <apex:pageMessages />
+           <apex:pageBlockButtons >
+             <apex:commandButton id="save" value="{!$Label.site.save}" action="{!save}" />
+           </apex:pageBlockButtons>
+           <h3>If you want to opt out from the following email(s), please select its corresponding checkbox below:</h3>
+           <br/><br/>
+           <apex:pageBlockTable value="{!myEmailPref}" var="pref">
+                <apex:column value="{!pref.Email__c}" headerValue="{!$ObjectType.TAMS_Email_Opt_In_Out__c.fields.Email__c.Label}"/>
+                <apex:column headerValue="{!$ObjectType.TAMS_Email_Opt_In_Out__c.fields.Is_Opt_Out__c.Label}" >
+                    <apex:inputCheckbox value="{!pref.Is_Opt_Out__c}" />
+                </apex:column>
+            </apex:pageBlockTable>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

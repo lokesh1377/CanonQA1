@@ -1,0 +1,102 @@
+<!--*********************************************************
+        Author:         
+        Purpose: This VisualForce Page is for Update Item.        
+        1.0 -                -            - Created
+        1.1 - Lokesh Tigulla - 02/19/2019 - updated
+**********************************************************-->
+<apex:page standardController="TAMS_ROA__c"  extensions="ChangeOrderUpdateActionCTRL" showHeader="true" sidebar="true">
+<apex:form id="UpdateItemId"> 
+    <apex:pageMessages />
+    <apex:sectionHeader title="Update Price from ROA">
+        <apex:pageBlock >
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="ROA #"/>
+                    <apex:outputField value="{!roa.Name}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Customer Name"/>
+                    <apex:outputField value="{!roa.Customer_Name__c}" />
+                </apex:pageBlockSectionItem>      
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="SID"/>
+                    <apex:outputField value="{!roa.Change_Order_SID__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                 <apex:outputLabel value="Order Number"/> 
+                  <apex:selectList value="{!selectorders1}" multiselect="false" size="1">
+                        <apex:selectOptions value="{!ord}"/>
+                        <apex:actionSupport event="onchange" action="{!orderchange}" reRender="UpdateItemId"/>
+                     </apex:selectList>
+                </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    <apex:outputText value="Modality"/>
+                   <apex:outputText value="{!modality}" /> 
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Booked Date"/>
+                   <apex:outputText value="{0,date,MM/dd/yyyy}"> 
+                      <apex:param value="{!orderBookedDate}" />
+                  </apex:outputText>
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Type"/>
+                   <apex:outputText value="{!orderType}" /> 
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Status"/>
+                   <apex:outputText value="{!orderStatus}" /> 
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Booked Amount"/>
+                   <apex:outputText value="{0, Number, Currency}">
+                   <apex:param value="{!orderBookedAmount}"/>
+                   </apex:outputText>
+                </apex:pageBlockSectionItem>                 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:sectionHeader>
+    <apex:pageBlock title="Select items">
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!save}" value="Save" disabled="{!isEditable}"/>
+            <apex:commandButton action="{!cancel}" value="Cancel" />
+        </apex:pageBlockButtons>        
+        <apex:pageBlockTable value="{!orderLines}" var="line" width="100%" >
+            <apex:column headerValue="Select">
+                <apex:actionRegion >
+                    <apex:inputCheckbox value="{!line.selected}" rendered="{!line.orderLine.Line_Number__c<>'1.1'}">
+                        <apex:actionSupport event="onchange" action="{!checkboxChanged}" reRender="UpdateItemId">
+                        </apex:actionSupport>   
+                    </apex:inputCheckbox>   
+                </apex:actionRegion>                    
+            </apex:column>               
+            <apex:column headerValue="Original Selling Price">
+                <apex:outputField value="{!line.orderLineMaster.Item_Selling_Price__c}" />
+            </apex:column>                      
+            <apex:column headerValue="Line #">
+                <apex:outputField value="{!line.orderLineMaster.Line_Number__c}" />
+            </apex:column>                                                                                              
+            <apex:column headerValue="Item Code">
+                <apex:outputField value="{!line.orderLineMaster.Ordered_Item__c}" />
+            </apex:column>
+             <apex:column headerValue="Status">
+                <apex:outputField value="{!line.orderLineMaster.Status__c}" />
+            </apex:column>
+            <apex:column headerValue="List Price">
+                <apex:outputField value="{!line.orderLineMaster.Item_List_Price__c}" />
+            </apex:column>
+            <apex:column headerValue="Line Quantity">
+                <apex:outputField value="{!line.orderLineMaster.Quantity__c}" />
+            </apex:column> 
+             <apex:column headerValue="New Selling Price" >
+                <apex:inputText value="{!line.newSellingPrice}" rendered="{!line.selected}"/>
+            </apex:column>  
+            <apex:column headerValue="Comments">
+                <apex:inputField value="{!line.changeOrderLine.COL_Comments__c}" rendered="{!line.selected}"/>
+            </apex:column>        
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+
+</apex:form>    
+    
+</apex:page>

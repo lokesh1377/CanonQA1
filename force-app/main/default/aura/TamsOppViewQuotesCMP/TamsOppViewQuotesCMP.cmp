@@ -1,0 +1,35 @@
+<aura:component controller="TamsOppShowQuotes"  implements="force:appHostable" access="global">
+	<aura:handler event="c:TamsOppQuotesEVT" action="{!c.getQuotesJS}"/> 
+	<aura:attribute name="quotes" type="TAMS_Quotes__c[]" />
+  <aura:attribute name="opportunityId" type="String" />
+    <ui:button label="Return" press="{!c.onReturn}"/>
+    <div>
+		<aura:iteration items="{!v.quotes}" var="quote" indexVar="idx">
+            <ul class="slds-has-dividers--bottom-space"  >
+              <li class="slds-item"> 
+                <div class="slds-tile slds-media" >
+                  <div class="slds-media__body">
+                    
+                      <div class="slds-grid slds-wrap slds-grid--pull-padded" >
+                          <div class="slds-p-horizontal--small slds-size--5-of-6">
+                    		<h3 class="slds-truncate">{!quote.Name}</h3>	      
+                          </div>  
+                          <div class="slds-p-horizontal--small slds-size--1-of-6" onclick="{!c.onSelect}" id="{!quote.Id}">
+                            <ui:inputCheckbox aura:id="checkbox" label="Primary" value="{!quote.Primary__c}"/>
+                          </div>                            
+                      </div>    
+                    <div class="slds-tile__detail slds-text-body--small">
+                      <ul class="slds-list--vertical">
+                        <li class="slds-item">{!quote.PBOM__c}</li>
+                        <li class="slds-item">Selling Amount:{!quote.Amount__c}</li>
+                        <li class="slds-item">{!quote.Status__c}</li>
+                        <li class="slds-item">Site Plan Status:{!quote.Site_Plan_Status__c}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>  
+    	</aura:iteration>
+    </div>		
+</aura:component>

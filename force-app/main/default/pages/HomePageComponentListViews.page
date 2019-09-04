@@ -1,0 +1,54 @@
+<apex:page controller="HomePageComponentListViewsController">
+<style>
+    form, html {
+    	background: white !important;
+    }
+</style>
+
+<apex:form >
+	<apex:pageMessages />
+	<table style="width:100%">
+  		<tr valign="top">
+    		<td>
+				<apex:pageBlock title="My Recent Cases" mode="detail">
+					<apex:pageBlockTable value="{!lCases}" var="case">
+		                <apex:column headerValue="{!$ObjectType.Case.fields.Subject.label}">
+		                    <apex:outputLink value="/{!case.Id}" target="_top">{!case.Subject}</apex:outputLink>
+		                </apex:column>
+						<apex:column headerValue="{!$ObjectType.Case.fields.Status.label}">
+		                    <apex:outputField value="{!case.Status}"/>
+		                </apex:column>
+						<apex:column headerValue="{!$ObjectType.Case.fields.Oracle_SR_Number_TAMS__c.label}">
+		                    <apex:outputField value="{!case.Oracle_SR_Number_TAMS__c}"/>
+		                </apex:column>
+						<apex:column headerValue="{!$ObjectType.Case.fields.SID__c.label}">
+		                    <apex:outputField value="{!case.SID__c}"/>
+		                </apex:column>
+						<apex:column headerValue="{!$ObjectType.Case.fields.Nickname__c.label}">
+		                    <apex:outputField value="{!case.Nickname__c}"/>
+		                </apex:column>
+						<apex:column headerValue="{!$ObjectType.Case.fields.Type.label}">
+		                    <apex:outputField value="{!case.Type}"/>
+		                </apex:column>
+					</apex:pageBlockTable>
+				</apex:pageBlock>
+    		</td>
+    		<td>
+				<apex:pageBlock title="My Recently Viewed Equipment" mode="detail">
+					<apex:pageBlockTable value="{!lInstallBaseItems}" var="item">
+		                <apex:column headerValue="{!$ObjectType.Install_Base_TAMS__c.fields.Product_Image__c.label}">
+		                    <apex:outputField value="{!item.Product_Image__c}"/>
+		                </apex:column>
+						<apex:column headerValue="{!$ObjectType.Install_Base_TAMS__c.fields.Name.label}">
+		                    <apex:outputLink value="/{!item.Id}" target="_top">{!item.Name}</apex:outputLink>
+		                </apex:column>
+						<apex:column headerValue="{!$ObjectType.Install_Base_TAMS__c.fields.Nickname__c.label}">
+		                    <apex:outputField value="{!item.Nickname__c}"/>
+		                </apex:column>
+					</apex:pageBlockTable>
+				</apex:pageBlock>
+    		</td>
+  		</tr>
+	</table>
+</apex:form>
+</apex:page>

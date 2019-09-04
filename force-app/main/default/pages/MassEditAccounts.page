@@ -1,0 +1,41 @@
+<apex:page standardController="Account" recordSetVar="unused" sidebar="false">
+<apex:includeScript value="{!$Resource.UtilJS}" />
+<apex:form >
+<apex:pageBlock >
+<apex:pageMessages />
+<apex:pageBlock >
+Note: All modifications made on the page will be lost if Return button is clicked without clicking the Save button first. 
+</apex:pageBlock>
+<apex:pageBlockButtons >
+<apex:commandButton value="Save" action="{!save}"/>
+<apex:commandButton value="Return" action="{!cancel}"/>
+</apex:pageBlockButtons>
+<apex:pageBlockTable value="{!selected}" var="acc" id="table">
+<apex:column headerValue="Account Classification">
+<apex:inputField value="{!acc.Account_Classification__c}"/>
+</apex:column>
+<apex:column headerValue="Name">
+<apex:outputField value="{!acc.name}"/>
+</apex:column>
+<apex:column headerValue="Street">
+<apex:outputField value="{!acc.ShippingStreet}"/>
+</apex:column>
+<apex:column headerValue="City">
+<apex:outputField value="{!acc.ShippingCity}"/>
+</apex:column>
+<apex:column headerValue="State">
+<apex:outputField value="{!acc.ShippingState}"/>
+</apex:column>
+<apex:column headerValue="Type">
+<apex:outputField value="{!acc.Type}"/>
+</apex:column>
+<apex:column headerValue="GPO Affiliations">
+<apex:outputField value="{!acc.GPO_Affiliations_TAMS__c}"/>
+</apex:column>
+<apex:column headerValue="Sub Classification">
+<apex:outputField value="{!acc.Sub_Classification_TAMS__c}"/>
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

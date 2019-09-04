@@ -1,0 +1,85 @@
+<apex:page showHeader="true" sidebar="true" standardController="Account" extensions="TamsAccountIBUtilizationChartCTRL">
+<apex:form >
+<style>
+    .fewerMore { display: none;}
+    form, html {
+    background: white !important;
+    } 
+</style>  
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/highcharts.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/highcharts-more.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/modules/exporting.js')}" />
+
+<script type="text/javascript">
+$(function () {
+
+        $('#SystemUtilization').highcharts({
+
+            
+            title: {
+                text: '',
+                 x: -20
+            },
+
+            subtitle: {
+                text: ''
+            },
+
+            xAxis: {
+                title: {
+                    text: 'Date'
+                },              
+                categories : {!displayStudyDates} 
+            },
+
+            yAxis: [{ // left y axis
+                title: {
+                    text: '# of Scans'
+                },
+                plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+                }],
+                floor: 0
+            }],
+
+        tooltip: {
+            valueSuffix: ' Scans'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{!SeriesString}
+        
+        ]
+    });
+
+});
+
+    </script>    
+  <apex:pageBlock >
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!returnBack}" value="Return" />
+        </apex:pageBlockButtons>  
+          <b>View </b><apex:selectList value="{!selectedOption}" size="1" >
+            <apex:selectOption itemValue="5" itemLabel="5 Days"/>
+            <apex:selectOption itemValue="7" itemLabel="7 Days"/>
+            <apex:selectOption itemValue="10" itemLabel="10 Days"/>
+            <apex:selectOption itemValue="14" itemLabel="14 Days"/>                
+            <apex:selectOption itemValue="21" itemLabel="21 Days"/>
+            <apex:selectOption itemValue="30" itemLabel="30 Days"/>
+            <apex:actionSupport event="onchange" action="{!refreshChart}" reRender="SystemUtilization" />
+          </apex:selectList>                
+      <apex:pageBlockSection columns="1" title="System Utilization By Equipment for Account: {!acct.Name}">   
+      <apex:pageBlockSectionItem >
+        <div id="SystemUtilization" style="width: 600px; height: 400px; float: left"/>
+      </apex:pageBlockSectionItem> 
+    </apex:pageBlockSection>
+  </apex:pageBlock>
+</apex:form>
+</apex:page>

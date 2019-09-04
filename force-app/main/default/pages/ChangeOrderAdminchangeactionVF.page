@@ -1,0 +1,558 @@
+<!--*********************************************************
+        Author:         
+        Purpose: This VisualForce Page is for Administrative Changes.        
+        1.0 -                -            - Created
+        1.1 - Lokesh Tigulla - 01/19/2019 - updated
+**********************************************************-->
+<apex:page standardController="TAMS_ROA__c" extensions="ChangeOrderAdminchangeactionCTRL" showHeader="true" sidebar="true" >
+<style>
+        #col1,#col2{width:49%;display:inline-block;}
+    </style>
+<apex:form id="AdminChangeForm">
+<apex:pageMessages />
+    <apex:sectionHeader title="Administrative Changes for Change Order">
+    <apex:commandLink action="{!back}" value="Back to Change Order" id="theCommandLink"/>
+    <div align="center">
+    <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -14%;" disabled="{!isEditable}"/>
+    <apex:commandButton action="{!cancel}" value="Cancel" disabled="{!isEditable}"/>
+    </div>
+        <apex:pageBlock id="AdminChangesBlock">
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Change Order #"/>
+                    <apex:outputField value="{!roa.Name}"/> 
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Customer Name"/>
+                     <apex:outputField value="{!roa.Account__c}" />
+                </apex:pageBlockSectionItem>       
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="SID"/>
+                    <apex:outputField value="{!roa.Change_Order_SID__c}" /> 
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel value="Order Number"/> 
+                   <apex:selectList value="{!selectorders1}" multiselect="false" size="1" >
+                        <apex:selectOptions value="{!ord}"/>
+                        <apex:actionSupport event="onchange" action="{!orderchange}" reRender="AdminChangeForm" />
+                     <!--   <label style="padding-left:14em">Order Number</label> -->
+                     </apex:selectList>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Modality"/>
+                   <apex:outputText value="{!modality}" /> 
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Booked Date"/>
+                   <apex:outputText value="{0,date,MM/dd/yyyy}"> 
+                      <apex:param value="{!orderBookedDate}" />
+                  </apex:outputText>
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Type"/>
+                   <apex:outputText value="{!orderType}" /> 
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Status"/>
+                   <apex:outputText value="{!orderStatus}" /> 
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Booked Amount"/>
+                   <apex:outputText value="{0, Number, Currency}">
+                   <apex:param value="{!orderBookedAmount}"/>
+                   </apex:outputText>
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                 <apex:outputLabel value="Change Type"/>
+                   <apex:inputField value="{!cOrdAdminChange.COAC_Change_Type__c}">
+                   <apex:actionSupport event="onchange" action="{!changetype}"  reRender="AdminChangeForm" /> 
+               </apex:inputField>
+                </apex:pageBlockSectionItem> 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    <apex:outputPanel rendered="{!showBillTo}">
+        <table style="width:100%">
+        <tr>
+            <td style="width:50%">
+        <apex:pageBlock title="Bill To Details">
+         <apex:pageBlockSection columns="1">
+         <apex:pageBlockSectionItem >
+                    <apex:outputText value="Bill To Customer"/>
+                    <apex:outputField value="{!resultantOrderMaster.Bill_To_Customer__c}"/> 
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem > 
+                    <apex:outputText value="Bill To Account Number"/>
+                    <apex:outputField value="{!resultantOrderMaster.Bill_To_Account_Number__c}"/>  
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Bill To Address"/>
+                    <apex:outputField value="{!resultantOrderMaster.Bill_To_Address__c}"/> 
+                </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </td>
+    <td>
+        <apex:pageBlock title="New Bill To Details" >
+         <apex:pageBlockButtons location="bottom">
+          <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -1317%;" disabled="{!isEditable}"/>
+          </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="1" >
+               <apex:outputPanel layout="block" > 
+                      <div class="lookupclass">
+                       <apex:outputLabel value="New Bill To Customer"/>
+                         <apex:inputHidden value="{!billtocustomer}" id="billtocustomerId" />
+                          <apex:actionSupport event="onclick" action="{!CustomerLookup}" reRender="AdminChangeForm"/>
+                          <apex:inputText size="20" value="{!billtocustomername}" id="inputname" styleClass="lookupinput"/>
+                            <a href="#" onclick="openLookupPopup('{!$Component.inputname}', '{!$Component.billtocustomerId}', 'Customer_Account_Master__c','Name','SELECT Id,Name,CAM_Account_Number__c,CAM_Account_Status__c,CAM_Account_Type__c,CAM_Classification__c,CAM_Sub_Classification__c FROM Customer_Account_Master__c where CAM_Account_Status__c = \'' +'Active' +'\' AND Name','Name:Customer Name;CAM_Account_Number__c:Account Number;CAM_Account_Type__c:Account Type;CAM_Account_Status__c:Account Status;CAM_Classification__c:Classification;CAM_Sub_Classification__c:Sub Classification;','Name','billtocustomerId');return false ">
+                            <img src="/img/s.gif" alt="Parent Account Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="New Bill To Customer (New Window)"/>
+                            </a>
+                     </div>
+                </apex:outputPanel> 
+
+                <apex:outputPanel layout="block" rendered="{!showBilltoaddress}"  > 
+                            <div class="lookupclass">
+                            <apex:outputLabel value="New Bill To Site Address"/>
+                            <apex:inputHidden value="{!billtoaddressId}" id="billtocustomerAddress" />
+                             <apex:actionSupport event="onclick" action="{!AddressLookup}"  reRender="AdminChangeForm"/>
+                            <apex:inputText size="20" value="{!billtoaddressname }" id="inputname1"  styleClass="lookupinput" />
+                            <a href="#" onclick="openLookupPopup('{!$Component.inputname1}', '{!$Component.billtocustomerAddress}', 'Customer_Site_Master__c','CSM_Site_Address_Lookup__c','SELECT Id,Name,CSM_Site_Number__c,CSM_Site_Use__c,CSM_Site_Status__c,CSM_Primary__c,CSM_Site_Address_Lookup__c,CSM_Customer_Name__c FROM Customer_Site_Master__c where CSM_Customer_Name__c = \'' +'{!billtocustomer}' +'\' AND CSM_Site_Use_Code__c =  \'' +'BILL_TO' +'\' AND CSM_Site_Status__c = \'' +'Active' +'\' AND CSM_Site_Address_Lookup__c','CSM_Site_Address_Lookup__c:Site Address;CSM_Site_Number__c:Site Number;CSM_Primary__c:Primary;CSM_Site_Status__c:Site Status;CSM_Site_Use__c:Site Use;','CSM_Site_Address_Lookup__c','billtocustomerAddress');return false ">
+                            <img src="/img/s.gif" alt="Parent Account Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="New Bill To Address (New Window)"/>
+                            </a>
+                        </div>
+               </apex:outputPanel>
+                <apex:pageBlockSectionItem > 
+                 <apex:outputText value="New Bill To Account Number"/>
+                  <apex:outputText value="{!accountNumber}"/>  
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+     </apex:pageBlockSection>
+ </apex:pageBlock>
+ </td>
+ </tr>
+ </table>
+</apex:outputPanel>
+ <apex:outputPanel rendered="{!showShipTo}">
+        <table style="width:100%">
+        <tr>
+            <td>
+        <apex:pageBlock title="Ship To Details">
+         <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem > 
+                    <apex:outputText value="Ship To Account Number"/>
+                    <apex:outputField value="{!resultantOrderMaster.Ship_To_Account_Number__c}"/>  
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Ship To Customer"/>
+                    <apex:outputField value="{!resultantOrderMaster.Ship_To_Customer__c}"/> 
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Ship To Address"/>
+                    <apex:outputField value="{!resultantOrderMaster.Ship_To_Address__c}"/> 
+                </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </td>
+    <td>
+        <apex:pageBlock title="New Ship To Details">
+           <apex:pageBlockButtons location="bottom">
+           <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -1317%;" disabled="{!isEditable}"/>
+           </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="1">
+                 <apex:outputPanel layout="block" > 
+                      <div class="lookupclass">
+                       <apex:outputLabel value="New Ship To Customer"/>
+                         <apex:inputHidden value="{!shiptocustomer}" id="shiptocustomerId" />
+                          <apex:actionSupport event="onclick" action="{!CustomerLookup}" reRender="AdminChangeForm"/>
+                          <apex:inputText size="20" value="{!shiptocustomername}" id="shiptoinputname" styleClass="lookupinput" />
+                            <a href="#" onclick="openLookupPopup('{!$Component.shiptoinputname}', '{!$Component.shiptocustomerId}', 'Customer_Account_Master__c','Name','SELECT Id,Name,CAM_Account_Number__c,CAM_Account_Status__c,CAM_Account_Type__c,CAM_Classification__c,CAM_Sub_Classification__c FROM Customer_Account_Master__c where CAM_Account_Status__c = \'' +'Active' +'\' AND Name','Name:Customer Name;CAM_Account_Number__c:Account Number;CAM_Account_Type__c:Account Type;CAM_Account_Status__c:Account Status;CAM_Classification__c:Classification;CAM_Sub_Classification__c:Sub Classification;','Name','shiptocustomerId');return false ">
+                            <img src="/img/s.gif" alt="Parent Account Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="New Ship To Customer (New Window)"/>
+                            </a>
+                     </div>
+                </apex:outputPanel> 
+
+                 <apex:outputPanel layout="block" rendered="{!showshiptoaddress}" > 
+                            <div class="lookupclass">
+                            <apex:outputLabel value="New Ship To Site Address"/>
+                            <apex:inputHidden value="{!shiptoaddressId}" id="shiptocustomerAddress" />
+                             <apex:actionSupport event="onclick" action="{!AddressLookup}"  reRender="AdminChangeForm"/>
+                            <apex:inputText size="20" value="{!shiptoaddressname}" id="shiptoinputname1"  styleClass="lookupinput" />
+                            <a href="#" onclick="openLookupPopup('{!$Component.shiptoinputname1}', '{!$Component.shiptocustomerAddress}', 'Customer_Site_Master__c','CSM_Site_Address_Lookup__c','SELECT Id,Name,CSM_Site_Number__c,CSM_Site_Use__c,CSM_Site_Status__c,CSM_Primary__c,CSM_Site_Address_Lookup__c,CSM_Customer_Name__c FROM Customer_Site_Master__c where CSM_Customer_Name__c = \'' +'{!shiptocustomer}' +'\' AND CSM_Site_Use_Code__c =  \'' +'SHIP_TO' +'\' AND CSM_Site_Status__c = \'' +'Active' +'\' AND CSM_Site_Address_Lookup__c','CSM_Site_Address_Lookup__c:Site Address;CSM_Site_Number__c:Site Number;CSM_Primary__c:Primary;CSM_Site_Status__c:Site Status;CSM_Site_Use__c:Site Use;','CSM_Site_Address_Lookup__c','shiptocustomerAddress');return false ">
+                            <img src="/img/s.gif" alt="Parent Account Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="New Ship To Address (New Window)"/>
+                            </a>
+                        </div>
+               </apex:outputPanel>
+
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="New Ship To Account Number"/>
+                    <apex:outputText value="{!accountNumber}"/> 
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+     </apex:pageBlockSection>
+ </apex:pageBlock>
+ </td>
+ </tr>
+ </table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!showPoNum}">
+        <table style="width:100%">
+        <tr>
+            <td style="width:45%">
+        <apex:pageBlock title="PO# Details">
+         <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem > 
+                    <apex:outputText value="PO#"/>
+                    <apex:outputField value="{!resultantOrderMaster.PO_Number__c}"/>  
+                </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </td>
+    <td>
+        <apex:pageBlock title="New PO# Details">
+         <apex:pageBlockButtons location="bottom">
+          <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -57em;" disabled="{!isEditable}"/>
+          </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="1">
+          <apex:pageBlockSectionItem > 
+                    <apex:outputText value="New PO#"/>
+                    <apex:inputField value="{!cOrdAdminChange.COAC_New_PO__c}"/>  
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+     </apex:pageBlockSection>
+ </apex:pageBlock>
+ </td>
+ </tr>
+ </table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!showGPOFees}">
+        <table style="width:100%">
+        <tr>
+            <td style="width:45%">
+        <apex:pageBlock title="GPO Admin Fee Details">
+         <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem > 
+                    <apex:outputText value="GPO Admin Fee"/>
+                    <apex:outputField value="{!resultantOrderMaster.OM_GPO_Admin_Fee__c}"/>  
+                </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </td>
+    <td>
+       <apex:pageBlock title="New GPO Admin Fee Details">
+         <apex:pageBlockButtons location="bottom">
+          <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -57em;" disabled="{!isEditable}"/>
+          </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="1">
+          <apex:pageBlockSectionItem > 
+                    <apex:outputText value="New GPO Admin Fee"/>
+                    <apex:inputField value="{!cOrdAdminChange.COAC_New_GPO_Fees__c}"/>  
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+     </apex:pageBlockSection>
+</apex:pageBlock>
+</td>
+</tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!showProBillTerm}">
+        <table style="width:100%">
+        <tr>
+            <td>
+        <apex:pageBlock title="Progressive Bill Term Details">
+         <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem > 
+                    <apex:outputText value="Progressive Bill Term"/>
+                    <apex:outputField value="{!resultantOrderMaster.Progressive_Bill_Term__c}"/>  
+                </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </td>
+    <td>
+        <apex:pageBlock title="New Progressive Bill Term Details">
+          <apex:pageBlockButtons location="bottom">
+          <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -1611%;" disabled="{!isEditable}"/>
+           </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="1">
+          <apex:pageBlockSectionItem > 
+                    <apex:outputText value="New Progressive Bill Term"/>
+                    <apex:inputField value="{!cOrdAdminChange.COAC_New_Progressive_Bill_Term__c}"/>  
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+     </apex:pageBlockSection>
+ </apex:pageBlock>
+ </td>
+ </tr>
+ </table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!showSalesChannel}">
+        <table style="width:100%">
+        <tr>
+            <td>
+        <apex:pageBlock title="Sales Channel Details">
+         <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem > 
+                    <apex:outputText value="Sales Channel"/>
+                    <apex:outputField value="{!resultantOrderMaster.Sales_Channel__c}"/>  
+                </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </td>
+    <td>
+        <apex:pageBlock title="New Sales Channel Details">
+          <apex:pageBlockButtons location="bottom">
+          <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -1611%;" disabled="{!isEditable}"/>
+           </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="1">
+          <apex:pageBlockSectionItem > 
+                    <apex:outputText value="New Sales Channel"/>
+                    <apex:inputField value="{!cOrdAdminChange.COAC_New_Sales_Channel__c}"/>  
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+     </apex:pageBlockSection>
+ </apex:pageBlock>
+ </td>
+ </tr>
+ </table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!showShippingMethod}" >
+        <table style="width:100%" >
+        <tr >
+            <td style="width:45%;">
+        <apex:pageBlock title="Shipping Method Details"  >
+         <apex:pageBlockSection columns="1" >
+                <apex:pageBlockSectionItem > 
+                    <apex:outputText value="Shipping Method" />
+                    <apex:outputField value="{!resultantOrderMaster.Shipping_Method__c}"/>  
+                </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </td>
+    <td>
+        <apex:pageBlock title="New Shipping Method Details">
+        <apex:pageBlockButtons location="bottom">
+            <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -1611%;" disabled="{!isEditable}"/>
+          </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="1">
+          <apex:pageBlockSectionItem > 
+                    <apex:outputText style="padding-right: 30px;" value="New Shipping Method"/>
+                    <apex:inputField value="{!cOrdAdminChange.COAC_New_Shipping_Method__c}"/>  
+                </apex:pageBlockSectionItem>  
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>      
+     </apex:pageBlockSection>
+ </apex:pageBlock>
+ </td>
+ </tr>
+ </table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!showSid}">
+        <table style="width:100%">
+        <tr>
+            <td>
+        <apex:pageBlock title="SID Details">
+         <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem > 
+                    <apex:outputText value="SID"/>
+                    <apex:outputField value="{!resultantOrderMaster.SID_Order__c}"/>  
+                </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </td>
+    <td>
+        <apex:pageBlock title="New SID Details">
+         <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -1611%;" disabled="{!isEditable}"/>
+            </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="1">
+          <apex:pageBlockSectionItem > 
+                    <apex:outputText style="padding-right: 30px;" value="New SID"/>
+                    <apex:inputField value="{!cOrdAdminChange.COAC_New_SID__c}"/>  
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+     </apex:pageBlockSection>
+ </apex:pageBlock>
+ </td>
+ </tr>
+ </table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!showWaiveDownPayment}" >
+     <apex:pageBlock title="Waive Down Payment">
+      <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -2844%;" disabled="{!isEditable}"/>
+            </apex:pageBlockButtons>
+                     <apex:pageBlockSection columns="1">
+                      <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Waive Down Payment"/>
+                  <apex:outputField value="{!cOrdAdminChange.COAC_Waive_Down_Payment__c}"/>  
+                </apex:pageBlockSectionItem>
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+   </apex:pageBlockSection>
+   </apex:pageBlock>
+ </apex:outputPanel>
+<apex:outputPanel rendered="{!showOther}">
+     <apex:pageBlock title="Other Changes">
+       <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!saveChangeOrder}" value="Save" style="margin-left: -2844%;" disabled="{!isEditable}"/>
+            </apex:pageBlockButtons>
+                     <apex:pageBlockSection >
+                 <apex:pageBlockSectionItem > 
+                 <apex:outputText value="Comments"/>
+                  <apex:inputField value="{!cOrdAdminChange.COAC_Comments__c}"/>  
+                </apex:pageBlockSectionItem>
+   </apex:pageBlockSection>
+   </apex:pageBlock>
+ </apex:outputPanel>
+  <apex:outputPanel rendered="{!showSalesCredit}">
+   <apex:pageBlock title="Change Sales Credits">
+    <apex:pageBlockTable value="{!salesCreditsWrapper}" var="scWrapper" id="salesCreditsTable">
+    <!--    <apex:column headerValue="ID">
+                 <apex:outputField value="{!scWrapper.sc.Name}"  /> 
+            </apex:column> -->  
+            <apex:column headerValue="Salesrep">
+                <apex:outputField value="{!scWrapper.rsc.Salesrep_Name__c}" />
+            </apex:column>                                                                                                  
+            <apex:column headerValue="Current Credit Type">
+                <apex:inputField value="{!scWrapper.rsc.Credit_Type__c}" style="display:none">
+             <!--        <apex:actionSupport event="onchange" action="{!creditTypeChange}" /> -->
+                    </apex:inputField>
+                    <apex:outputText value="{!scWrapper.rsc.Credit_Type__c}" /> 
+            </apex:column>
+            <apex:column headerValue="Current Percentage">
+                <apex:outputField value="{!scWrapper.rsc.Old_Percentage__c}" />
+            </apex:column>          
+            <apex:column headerValue="To Salesrep1" style="display: contents;">
+                <apex:inputField value="{!scWrapper.rsc.To_Salesrep1__c}" rendered="{!!scWrapper.isRevenueCostCenter}" styleClass="hideSelectClass"/> 
+                <apex:inputField value="{!scWrapper.rsc.COAC_New_Revenue_Cost_Center_One__c}" rendered="{!scWrapper.isRevenueCostCenter}" /> 
+            </apex:column>                                                                                                  
+            <apex:column headerValue="Salesrep1 %">
+                <apex:inputField value="{!scWrapper.rsc.To_Percentage1__c}" style="max-width:50%"/>
+            </apex:column>          
+            <apex:column headerValue="To Salesrep2">
+               <apex:inputField value="{!scWrapper.rsc.To_Salesrep2__c}" style="max-width:50%" rendered="{!!scWrapper.isRevenueCostCenter}" styleClass="hideSelectClass"/>
+                <apex:inputField value="{!scWrapper.rsc.COAC_New_Revenue_Cost_Center_Two__c }" rendered="{!scWrapper.isRevenueCostCenter}" /> 
+            </apex:column>                                                                                                  
+            <apex:column headerValue="Salesrep2 %">
+                <apex:inputField value="{!scWrapper.rsc.To_Percentage2__c}" style="max-width:50%"/>
+            </apex:column> 
+           <apex:column headerValue="Comments">
+                <apex:inputField value="{!scWrapper.rsc.COAC_Comments__c}"/>
+            </apex:column> 
+        </apex:pageBlockTable>
+      </apex:pageBlock>
+</apex:outputPanel>
+</apex:sectionHeader>
+</apex:form>
+<style type="text/css">
+    .bPageBlock .pbTitle {
+        width: 100%;    
+        text-align: left;
+    }
+
+    /*.hideSelectClass{
+
+    }*/
+
+    div.hideSelectClass select{
+        display: none !important;
+    }
+</style>
+ <script type="text/javascript">
+var newWin=null;
+var billtocustomerIdvalue = '';
+var shiptocustomerIdvalue = '';
+function openLookupPopup(name,id, objectName, fieldName, query, listofcolumns,orderBy, fieldtype)
+{ 
+var inid1value;
+var innamevalue; 
+//var inid1=document.getElementById("{!$Component.page1.formid.block1.sec1.item1.inputid}").value;
+//var inname=document.getElementById("{!$Component.page1.formid.block1.sec1.item1.inputname}").value;
+console.log(billtocustomerIdvalue);
+console.log(fieldtype);
+if(fieldtype === "billtocustomerId" ||fieldtype === "billtocustomerAddress"){
+    innamevalue = "{!billtoaddressname}";
+    inid1value = "{!billtoaddressId}";
+}
+if(fieldtype === "shiptocustomerId" || fieldtype === "shiptocustomerAddress"){
+           inid1value = "{!shiptoaddressId}";
+          innamevalue = "{!shiptoaddressname}"; 
+}
+if(fieldtype === "billtocustomerAddress" && billtocustomerIdvalue !== ''){
+    query = "SELECT Id,Name,CSM_Site_Number__c,CSM_Site_Use__c,CSM_Site_Status__c,CSM_Primary__c,CSM_Site_Address_Lookup__c FROM Customer_Site_Master__c where CSM_Customer_Name__c = '" + billtocustomerIdvalue + "' AND CSM_Site_Use_Code__c = 'BILL_TO' AND CSM_Site_Status__c =  'Active' AND CSM_Site_Address_Lookup__c";
+}
+if(fieldtype === "shiptocustomerAddress" && shiptocustomerIdvalue !== ''){
+    query = "SELECT Id,Name,CSM_Site_Number__c,CSM_Site_Use__c,CSM_Site_Status__c,CSM_Primary__c,CSM_Site_Address_Lookup__c FROM Customer_Site_Master__c where CSM_Customer_Name__c = '" + shiptocustomerIdvalue + "' AND CSM_Site_Use_Code__c = 'SHIP_TO' AND CSM_Site_Status__c =  'Active' AND CSM_Site_Address_Lookup__c";
+}
+var inid1=inid1value;
+var inname=innamevalue;
+var sobjectName = objectName;
+var fieldName = fieldName;
+//alert(document.getElementById("{!$Component.ChangeorderForm.hdrOutput.ChangeorderBlock.changeorder.inputname}").value);
+//var id = document.getElementById(id);
+var url="/apex/ChangeOrderlookupVF?namefield=" + name + "&idfield=" +id+"&parentid="+inid1+"&parentname="+inname+"&sObject="+sobjectName+"&fieldName="+fieldName+"&query="+query+"&listofcolumns="+listofcolumns+"&orderBy="+orderBy;
+newWin=window.open(url, 'Popup','height=500,width=600,left=100,top=100,resizable=no,scrollbars=yes,toolbar=no,status=no');
+if (window.focus)
+{
+newWin.focus();
+}
+ 
+return false;
+}
+ 
+function closeLookupPopup(element)
+{
+    console.log("***"+element);
+    console.log("***"+element.value);
+    var elementId = element.id;
+    console.log("elementId"+elementId);
+    if(elementId.includes("billtocustomerId")){
+        billtocustomerIdvalue = element.value;
+    }
+    console.log(billtocustomerIdvalue);
+    if(elementId.includes("shiptocustomerId")){
+        shiptocustomerIdvalue = element.value;
+    }
+
+if (null!=newWin)
+{
+newWin.close();
+}
+}
+ </script>
+
+
+ <style type="text/css">
+     /*.lookupclass{
+        position: relative;
+        left: 17em;
+     }
+*/     .lookupinput{
+        margin-left: 14px;
+     }
+ </style> 
+
+</apex:page>

@@ -1,0 +1,2 @@
+<apex:page standardController="MR_Daily_QA__c" recordSetVar="a"
+action="{!URLFOR($Action.MR_Daily_QA__c.List,$ObjectType.MR_Daily_QA__c)}" />

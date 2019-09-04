@@ -1,0 +1,28 @@
+<aura:component >
+    <aura:attribute name="accountName" type="String"/>
+    <aura:attribute name="status" type="String" />
+    <aura:attribute name="modality" type="String"/>
+    <aura:attribute name="leadName" type="String"/>
+    <aura:attribute name="sortBy" type="String" default="Rank"/>
+    <aura:attribute name="rank" type="String"/>    
+	<aura:handler event="c:Show360AssistLeads" action="{!c.showSearch}"/>
+    <aura:if isTrue="{!v.accountName!=null}">
+        Account Name: {!v.accountName}
+    </aura:if>
+    <aura:if isTrue="{!v.leadName!=null}">
+        Lead Name: {!v.leadName}
+    </aura:if>    
+    <aura:if isTrue="{!v.modality!=null}">
+        Modality: {!v.modality}
+    </aura:if>        
+    <aura:if isTrue="{!v.status!=null}">
+        status: {!v.status}
+    </aura:if>         
+    <aura:if isTrue="{!v.rank!=null}">
+        Rank: {!v.rank}
+    </aura:if>  
+    <BR></BR>
+    <aura:if isTrue="{!v.sortBy!=null}">
+        SortBy: {!v.sortBy}
+    </aura:if>      
+</aura:component>

@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Fires to show 360 Assist Leads">
+    <aura:attribute name="leads" type="Lead[]" description="Contains eligible leads"/>
+</aura:event>

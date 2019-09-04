@@ -1,0 +1,2 @@
+<apex:page standardController="TAMS_FSR_Attachment__c" recordSetVar="a"
+action="{!URLFOR($Action.TAMS_FSR_Attachment__c.List,$ObjectType.TAMS_FSR_Attachment__c)}" />

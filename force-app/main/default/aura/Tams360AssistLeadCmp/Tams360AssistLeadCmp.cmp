@@ -1,0 +1,43 @@
+<aura:component implements="force:appHostable">
+    <aura:attribute name="leads" type="Lead[]"/>
+    <aura:attribute name="leadsCount" type="Integer" />
+    <aura:handler event="c:Show360AssistLeads" action="{!c.showLeadsJS}"/>
+    <div>
+		<aura:iteration items="{!v.leads}" var="lead" indexVar="idx">
+            <ul class="slds-has-dividers--bottom-space"  >
+              <li class="slds-item">
+                <div class="slds-tile slds-media" onclick="{!c.onClick}" id="{!lead.Id}">
+                  <div class="slds-media__body">
+                    
+                      <div class="slds-grid slds-wrap slds-grid--pull-padded" >
+                          <div class="slds-p-horizontal--small slds-size--5-of-6">
+                    		<h3 class="slds-truncate">{!lead.Existing_Account__r.Name}</h3>	      
+                          </div>  
+                          <div class="slds-p-horizontal--small slds-size--1-of-6">
+                            <aura:if isTrue="{!lead.Rank_PIcklist__c=='1-Hot'}">  
+                    			<img src="{!$Resource.FlagRed}"/>
+                            </aura:if>
+							<aura:if isTrue="{!lead.Rank_PIcklist__c=='2-Warm'}">  
+                    			<img src="{!$Resource.FlagYellow}"/>
+                            </aura:if>              
+							<aura:if isTrue="{!lead.Rank_PIcklist__c=='3-Cool'}">  
+                    			<img src="{!$Resource.FlagBlue}"/>
+                            </aura:if>                              
+                          </div>                            
+                      </div>    
+                    <div class="slds-tile__detail slds-text-body--small">
+                      <ul class="slds-list--vertical">
+                        <li class="slds-item">{!lead.Name}</li>
+                        <li class="slds-item">{!lead.Status}-{!lead.Primary_Modality_TAMS__c}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>  
+    	</aura:iteration>
+        <aura:if isTrue="{!v.leadsCount==0}">
+            <h3 class="slds-text-title">No leads Found.</h3>
+        </aura:if>
+    </div>    
+</aura:component>

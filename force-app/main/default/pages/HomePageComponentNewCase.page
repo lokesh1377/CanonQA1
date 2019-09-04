@@ -1,0 +1,22 @@
+<apex:page >
+<script>
+    function openWindow(){
+        window.parent.location.href= "{!URLFOR($Action.Case.NewCase, null, [retURL='500'] ,false)}";
+    }
+</script>
+<style>
+    .btn {
+	    width: 100% !important;
+	    color: white;
+	    margin: 0 0 10px 0 !important;
+    }
+    
+    form, html {
+    	background: white !important;
+    }
+</style>
+
+<apex:form >
+	<apex:commandButton value="Create General Inquiry" onClick="openWindow()"/>
+</apex:form>
+</apex:page>

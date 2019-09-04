@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Tams Opportunity Show Quotes Event" >
+	<aura:attribute name="opportunityId" type="String" description="Opportunity Id"/>
+</aura:event>

@@ -1,0 +1,2 @@
+<apex:page standardController="ServiceContract" recordSetVar="a"
+action="{!URLFOR($Action.ServiceContract.List,$ObjectType.ServiceContract)}" />

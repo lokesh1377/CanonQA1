@@ -1,0 +1,3 @@
+<apex:page standardController="Install_Base_TAMS__c">
+    <apex:relatedList list="Install_Base_Counters__r" />
+</apex:page>

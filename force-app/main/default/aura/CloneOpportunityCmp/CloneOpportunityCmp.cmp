@@ -1,0 +1,3 @@
+<aura:component implements="force:appHostable,force:lightningQuickActionWithoutHeader,force:hasRecordId,flexipage:availableForAllPageTypes"  controller="CloneOpportunity">
+	<aura:handler name="init" value="{!this}" action="{!c.CloneOpportunityJS}"/>
+</aura:component>

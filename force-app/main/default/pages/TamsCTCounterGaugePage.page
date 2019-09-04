@@ -1,0 +1,139 @@
+<apex:page standardController="Install_Base_TAMS__c" extensions="TamsCTCounterGaugeExtController"> 
+<apex:form >
+<style>
+    .fewerMore { display: none;}
+    form, html {
+    background: white !important;
+    }
+</style>  
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/highcharts.js')}"  />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/highcharts-more.js')}" /> 
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/modules/exporting.js')}" />
+    
+<script type="text/javascript"> 
+                     //alert('Inside javascript');
+                     var cnt = {!diffCount};
+                     //alert('cnt:'+cnt);
+                    var sliceCnt = {!sliceCounter};   
+                     var maxValue = sliceCnt*1.5; 
+                     if(cnt > maxValue)
+                        maxValue = cnt*1.5;    
+                     //alert('sliceCnt:'+sliceCnt);
+          $(function () {
+                      $('#CTCounterGauge').highcharts({ 
+
+                    chart: {
+                        type: 'gauge',
+                        plotBackgroundColor: null,
+                        plotBackgroundImage: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false
+                    },
+
+                    title: {
+                        text: ''
+                    },
+
+                    pane: {
+                        startAngle: -150,
+                        endAngle: 150,
+                        background: [{
+                            backgroundColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                stops: [
+                                    [0, '#FFF'],
+                                    [1, '#333']
+                                ]
+                            },
+                            borderWidth: 0,
+                            outerRadius: '109%'
+                        }, {
+                            backgroundColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                stops: [
+                                    [0, '#333'],
+                                    [1, '#FFF']
+                                ]
+                            },
+                            borderWidth: 1,
+                            outerRadius: '107%'
+                        }, {
+                            // default background
+                        }, {
+                            backgroundColor: '#DDD',
+                            borderWidth: 0,
+                            outerRadius: '105%',
+                            innerRadius: '103%'
+                        }]
+                    },
+
+                    // the value axis
+                    yAxis: {
+                        min: 0,
+                        max: maxValue,
+
+                        minorTickInterval: 'auto',
+                        minorTickWidth: 1,
+                        minorTickLength: 10,
+                        minorTickPosition: 'inside',
+                        minorTickColor: '#666',
+
+                        tickPixelInterval: 30,
+                        tickWidth: 2,
+                        tickPosition: 'inside',
+                        tickLength: 10,
+                        tickColor: '#666',
+                        labels: {
+                            step: 2,
+                            rotation: 'auto'
+                        },
+                        title: {
+                            text: 'Count'
+                        },
+                        plotBands: [{
+                            from: 0,
+                            to: sliceCnt,
+                            color: '#55BF3B' // green
+                        }, {
+                            from: sliceCnt,
+                            to: maxValue,
+                            color: '#DF5353' // red
+                        }]
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Count',
+                        data: [cnt],
+                        tooltip: {
+                            valueSuffix: ' Rotations'
+                        }
+                    }]
+
+                });
+              }); 
+   </script>
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="2" title="CT Rotation Count">
+          <apex:pageBlockSectionItem >
+            <div id="CTCounterGauge"  style="width: 225px; height: 225px; float: left" />
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+            <apex:pageBlockSection columns="1" rendered="{!rotationCountStr!=null}">
+              <apex:pageBlockSectionItem >
+                <apex:outputText value="{!rotationCountStr}" />
+              </apex:pageBlockSectionItem>
+              <apex:pageBlockSectionItem >
+                <apex:outputText value="{!usageString}" rendered="{!(usageString<>null)}"/>
+              </apex:pageBlockSectionItem>
+              <apex:pageBlockSectionItem >
+                <apex:commandButton action="{!sendEmail}" value="Email ASM" />
+              </apex:pageBlockSectionItem>              
+            </apex:pageBlockSection>
+        </apex:pageBlockSectionItem>
+      </apex:pageBlockSection>      
+    </apex:pageBlock>        
+</apex:form>
+</apex:page>

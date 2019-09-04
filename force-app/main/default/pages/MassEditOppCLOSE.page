@@ -1,0 +1,160 @@
+<apex:page standardController="Opportunity" extensions="SortControllerAE" recordSetVar="unused" sidebar="false">
+<apex:includeScript value="{!$Resource.UtilJS}" />
+<apex:form >
+<apex:pageBlock >
+<apex:pageMessages />
+<apex:pageBlock >
+Note: All modifications made on the page will be lost if Return button is clicked without clicking the Save button first. 
+</apex:pageBlock>
+<apex:pageBlockButtons >
+ <apex:commandButton value="Save" action="{!SaveAll}"/>
+ <apex:commandButton value="Return" action="{!cancel}"/>
+</apex:pageBlockButtons>
+
+<apex:inputhidden id="fields" value="{!FieldList}" immediate="true"/>
+<script>
+ var eleFieldList = document.getElementById('{!$Component.fields}');
+ eleFieldList.value = 'Id, Name, AccountId, Modality_TAMS__c, StageName, SID_TAMS__c, Actual_Book_Date_TAMS__c,';
+ eleFieldList.value += 'Competitor_Lost_to_TAMS__c,Win_Reason_TAMS__c, Lost_Cancelled_Reason_TAMS__c,Additional_Comments_TAMS__c,'; 
+ eleFieldList.value += 'Service_Contract_Sold__c,X4_Yr_Service_Contract_Amount_TAMS__c,Service_Contract_Comments_TAMS__c, CloseDate,PBOM__c';  
+</script>
+
+<apex:pageBlockTable value="{!Opps}" var="opp" id="table">
+
+<apex:column headerValue="Opportunity Name">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Opportunity Name{!IF(sortExpression=='Name',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Name" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+
+ <apex:outputLink value="/{!opp.Id}" id="theOpp">{!opp.Name}</apex:outputLink>
+</apex:column>
+
+<apex:column headerValue="SID">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="SID{!IF(sortExpression=='SID_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="SID_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+
+ <apex:outputField value="{!opp.SID_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Modality">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Modality{!IF(sortExpression=='Modality_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Modality_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+ 
+ <apex:outputField value="{!opp.Modality_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Milestone">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Milestone{!IF(sortExpression=='StageName',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="StageName" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+ <apex:inputField value="{!opp.StageName}"/>
+</apex:column>
+
+
+<apex:column headerValue="Actual Close Date">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Actual Close Date{!IF(sortExpression=='Actual_Book_Date_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="StageName" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+ <apex:inputField value="{!opp.Actual_Book_Date_TAMS__c}"/>
+</apex:column>
+
+
+<apex:column headerValue="Competitor Won/Lost To">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Competitor Won/Lost To{!IF(sortExpression=='Competitor_Lost_to_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Competitor_Lost_to_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+ 
+ <apex:inputField value="{!opp.Competitor_Lost_to_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Win Reason">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Win Reason{!IF(sortExpression=='Win_Reason_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Win_Reason_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+ 
+ <apex:inputField value="{!opp.Win_Reason_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Lost/Cancelled Reason">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Lost/Cancelled Reason{!IF(sortExpression=='Lost_Cancelled_Reason_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Lost_Cancelled_Reason_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:inputField value="{!opp.Lost_Cancelled_Reason_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Opportunity Close Comments">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Opportunity Close Comments{!IF(sortExpression=='Additional_Comments_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Additional_Comments_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:inputField value="{!opp.Additional_Comments_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Service Contract Sold">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Service Contract Sold{!IF(sortExpression=='Service_Contract_Sold__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Service_Contract_Sold__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:inputField value="{!opp.Service_Contract_Sold__c}"/>
+</apex:column>
+
+<apex:column headerValue="Contract Amount">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Contract Amount{!IF(sortExpression=='X4_Yr_Service_Contract_Amount_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="X4_Yr_Service_Contract_Amount_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+ 
+ <apex:inputField value="{!opp.X4_Yr_Service_Contract_Amount_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Service Contract Comments">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Service Contract Comments{!IF(sortExpression=='Service_Contract_Comments_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Service_Contract_Comments_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:inputField value="{!opp.Service_Contract_Comments_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Product">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Product{!IF(sortExpression=='PBOM__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="PBOM__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:outputField value="{!opp.PBOM__c}"/>
+</apex:column>
+
+</apex:pageBlockTable>
+</apex:pageBlock>
+
+</apex:form>
+
+
+</apex:page>

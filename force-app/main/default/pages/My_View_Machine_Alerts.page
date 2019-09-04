@@ -1,0 +1,2 @@
+<apex:page standardController="Machine_Alerts__c" recordSetVar="a"
+action="{!URLFOR($Action.Machine_Alerts__c.List,$ObjectType.Machine_Alerts__c)}" />

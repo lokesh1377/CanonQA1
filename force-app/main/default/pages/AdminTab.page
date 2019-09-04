@@ -1,0 +1,38 @@
+<apex:page controller="AdminTabController" tabStyle="Admin__tab" lightningStyleSheets="true">
+	<apex:form >
+		<apex:pageMessages />
+		<apex:pageBlock title="Administration" mode="edit">
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton value="New User Request" action="{!NewUserRequest}"/>
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+		<apex:pageBlock mode="edit">
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Save" action="{!Save}"/>
+				<apex:commandButton value="Cancel" action="{!Cancel}"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Accounts" for="account"/>
+                    <apex:selectList value="{!sSelectedAccountId}" multiselect="false" size="1" id="account">
+                        <apex:selectOptions value="{!UserAccountOptions}"/>
+                        <apex:actionSupport action="{!RetrieveAccountContacts}" event="onchange" reRender="pBlock" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection title="Account Portal Users" id="pBlock">
+                <apex:pageBlockTable value="{!lAccountContacts}" var="contact" id="acct_contacts">
+                	<apex:column headerValue="{!$ObjectType.Contact.fields.Name.label}">
+                		<apex:outputField value="{!contact.Name}"/>
+	                </apex:column>
+                	<apex:column headerValue="{!$ObjectType.Contact.fields.Modality__c.label}">
+	                    <apex:inputField value="{!contact.Modality__c}"/>
+	                </apex:column>
+                	<apex:column headerValue="{!$ObjectType.Contact.fields.Is_Frozen__c.label}">
+	                    <apex:inputField value="{!contact.Is_Frozen__c}"/>
+	                </apex:column>
+                </apex:pageBlockTable>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,2 @@
+<apex:page standardController="Sales_Budget__c" recordSetVar="a"
+action="{!URLFOR($Action.Sales_Budget__c.List,$ObjectType.Sales_Budget__c)}" />

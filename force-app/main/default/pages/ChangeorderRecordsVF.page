@@ -1,0 +1,42 @@
+<!--*********************************************************
+        Author:         
+        Purpose: This VisualForce Page is for displaying OFA on Change Order Page.        
+        1.0 -                -            - Created
+        1.1 - Lokesh Tigulla - 02/19/2019 - updated
+**********************************************************-->
+<apex:page standardController="TAMS_ROA__c" extensions="ChangeorderRecordsController" showHeader="true" sidebar="true"  lightningstylesheets="true">
+     <apex:form >
+            <apex:pageBlock rendered="{!showChangeorderExternal}">
+                  <apex:pageBlockTable value="{!changeorderExternal}" var="changeorders">
+                    <apex:column headerValue="Change orders" >
+                 <apex:commandLink value="{!changeorders.Name}" action="{!changeOrder}" target="_blank">
+                  <apex:param name="changeordername"
+                              value="{!changeorders.Name}"
+                              assignTo="{!changeordername}"/>
+                 </apex:commandLink>
+               </apex:column>
+                  <apex:repeat value="{!fields}" var="f" > 
+                    <apex:column headerValue="{!f.label}" >
+                        <apex:outputField value="{!changeorders[f]}"/>
+                    </apex:column>
+                </apex:repeat>
+                  </apex:pageBlockTable>
+            </apex:pageBlock>
+            <apex:pageBlock rendered="{!showChangeOrderInternal}">
+              <apex:pageBlockTable value="{!changeorderInternal}" var="changeorders">
+                 <apex:column headerValue="Change orders" >
+                    <apex:commandLink value="{!changeorders.Name}" action="{!changeOrder}" target="_blank">
+                  <apex:param name="changeordername"
+                              value="{!changeorders.Name}"
+                              assignTo="{!changeordername}"/>
+                 </apex:commandLink>
+                </apex:column>
+                 <apex:repeat value="{!fields}" var="f" > 
+                    <apex:column headerValue="{!f.label}" >
+                      <apex:outputField value="{!changeorders[f]}"/>
+                   </apex:column>
+              </apex:repeat>
+           </apex:pageBlockTable> 
+         </apex:pageBlock>  
+     </apex:form> 
+</apex:page>

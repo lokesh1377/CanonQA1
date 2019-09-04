@@ -1,0 +1,3 @@
+<apex:page standardController="Opportunity" extensions="OpportunityOriginalSIDWarningMsgCTRL" action="{!getMsg}" lightningstylesheets="true">
+    <font color="FF0000"><b><apex:Messages /></b></font>
+</apex:page>

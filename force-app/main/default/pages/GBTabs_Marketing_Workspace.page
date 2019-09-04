@@ -1,0 +1,25 @@
+<apex:page showHeader="true" sidebar="false" title="Marketing Workspace">
+	<GBLite:TabbedPageComponent pageAPIName="GBTabs_Marketing_Workspace" >
+	<GBLite:EmbedComponent baseGridUrl="{!$Page.GBLite__Grid}" />
+		<script>
+			var pageDefinition = {
+	"name": "Marketing Workspace",
+	"tabs": [
+		{
+			"name": "Marketing Materials",
+			"content": "{!gridPage}gname=Marketing Materials Workspace&sh=0",
+			"id": 1501685906899
+		}
+	],
+	"id": 1501685906898,
+	"description": "",
+	"globalButtons": true,
+	"object": "0",
+	"height": "650",
+	"showHeader": true,
+	"showSidebar": false,
+	"pageAPIName": "GBTabs_Marketing_Workspace"
+};
+		</script>
+	</GBLite:TabbedPageComponent>
+</apex:page>

@@ -1,0 +1,214 @@
+<apex:page standardController="Install_Base_TAMS__c" extensions="TamsTrendingDBChartExt" >
+<style>
+    .fewerMore { display: none;}
+    form, html {
+    background: white !important;
+    }
+</style>   
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/highcharts.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/highcharts-more.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/modules/solid-gauge.js')}" />
+    <script type="text/javascript">
+        //alert('Inside javascript');
+        var hLevel =  {!heliumLevel};
+        //alert('hLevel:'+hLevel);
+        var gaugeOptionsHelium = {
+                  chart: {
+                      type: 'solidgauge'
+                  },
+
+                  title: null,
+
+                  pane: {
+                      center: ['50%', '85%'],
+                      size: '140%',
+                      startAngle: -90,
+                      endAngle: 90,
+                      background: {
+                          backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+                          innerRadius: '60%',
+                          outerRadius: '100%',
+                          shape: 'arc'
+                      }
+                  },
+                  credits: {
+                      enabled: false
+                  },
+
+                  tooltip: {
+                      enabled: false
+                  },
+                          // the value axis
+                          yAxis: {
+                              stops: [
+                                  [0.45, 'red'], 
+                                  [1.0, 'green'] 
+                              ],
+                              lineWidth: 0,
+                              minorTickInterval: null,
+                              tickPixelInterval: 50,
+                              tickWidth: 0,
+                              title: {
+                                  y: -70
+                              },
+                              labels: {
+                                  y: 16
+                              }
+                          },
+                          plotOptions: {
+                              solidgauge: {
+                                  dataLabels: {
+                                      y: 5,
+                                      borderWidth: 0,
+                                      useHTML: true
+                                  }
+                              }
+                          }
+                      };
+
+        $(function () {
+            $('#TrendingDBChartHelium').highcharts(Highcharts.merge(gaugeOptionsHelium, {
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: 'Helium Level'
+                    }
+                },
+
+                credits: {
+                    enabled: false
+                },
+
+                series: [{
+                    name: 'Helium Level',
+                    data: [hLevel],
+                    dataLabels: {
+                        format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                            ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                               '<span style="font-size:12px;color:silver">Helium Level</span></div>'
+                    },
+                    tooltip: {
+                        valueSuffix: 'Helium Level'
+                    }
+                }]
+            }));
+        
+        });                     
+
+    </script>
+    <script type="text/javascript">
+        //alert('Inside javascript');
+        var sLevel =  {!shieldTemp};
+        var greenVal = 0;
+        var product  = "{!productCode}";
+        var x =  product.indexOf("Excel");
+        //alert('x:'+x);
+        if( x != -1)
+        {
+          greenVal = .78;
+        }
+        else
+        {
+          greenVal = .65;
+        }
+        //alert('greenVal:'+greenVal);
+        var gaugeOptionsShield = {
+                  chart: {
+                      type: 'solidgauge'
+                  },
+
+                  title: null,
+
+                  pane: {
+                      center: ['50%', '85%'],
+                      size: '140%',
+                      startAngle: -90,
+                      endAngle: 90,
+                      background: {
+                          backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+                          innerRadius: '60%',
+                          outerRadius: '100%',
+                          shape: 'arc'
+                      }
+                  },
+                  credits: {
+                      enabled: false
+                  },
+
+                  tooltip: {
+                      enabled: false
+                  },
+                          // the value axis
+
+                          yAxis: {
+                              stops: [
+                                  [greenVal, 'green'], // green
+                                  [1.0, 'red'] // red
+                              ],
+                              lineWidth: 0,
+                              minorTickInterval: null,
+                              tickPixelInterval: 50,
+                              tickWidth: 0,
+                              title: {
+                                  y: -70
+                              },
+                              labels: {
+                                  y: 16
+                              }
+                          },
+
+                          plotOptions: {
+                              solidgauge: {
+                                  dataLabels: {
+                                      y: 5,
+                                      borderWidth: 0,
+                                      useHTML: true
+                                  }
+                              }
+                          }
+                      };
+
+        $(function () {
+            $('#TrendingDBChartShield').highcharts(Highcharts.merge(gaugeOptionsShield, {
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: 'Shield Temperature'
+                    }
+                },
+
+                credits: {
+                    enabled: false
+                },
+
+                series: [{
+                    name: 'Shield Temperature',
+                    data: [sLevel],
+                    dataLabels: {
+                        format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                            ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                               '<span style="font-size:12px;color:silver">Shield Temperature</span></div>'
+                    },
+                    tooltip: {
+                        valueSuffix: 'Shield Temperature'
+                    }
+                }]
+            }));
+        
+        });                     
+
+    </script>    
+  <apex:pageBlock >
+    <apex:pageBlockSection columns="2" title="MR System Snapshot">
+      <apex:pageBlockSectionItem >
+        <div id="TrendingDBChartHelium" style="width: 300px; height: 200px; float: left"/>
+      </apex:pageBlockSectionItem> 
+      <apex:pageBlockSectionItem >  
+        <div id="TrendingDBChartShield" style="width: 300px; height: 200px; float: left"/>
+      </apex:pageBlockSectionItem>    
+    </apex:pageBlockSection>
+  </apex:pageBlock>       
+</apex:page>

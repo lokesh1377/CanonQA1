@@ -1,0 +1,2 @@
+<apex:page standardController="FOB_Down__c" recordSetVar="a"
+action="{!URLFOR($Action.FOB_Down__c.List,$ObjectType.FOB_Down__c)}" />

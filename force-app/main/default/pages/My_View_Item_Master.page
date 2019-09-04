@@ -1,0 +1,2 @@
+<apex:page standardController="ItemMaster__c" recordSetVar="a"
+action="{!URLFOR($Action.ItemMaster__c.List,$ObjectType.ItemMaster__c)}" />

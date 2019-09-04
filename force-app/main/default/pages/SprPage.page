@@ -1,0 +1,104 @@
+<apex:page standardController="TAMS_Special_Pricing_Request__c" extensions="SprQuotesExt" action="{!saveSpr}">
+    
+    <apex:form id="sprForm">
+         
+        <apex:outputPanel id="hdrOutput">
+            <apex:pageBlock id="sprBlock">
+                <apex:pageMessages id="showMsg"></apex:pageMessages>
+                <apex:pageBlockButtons >
+                    <apex:commandButton value="Quick Save" action="{!saveChanges}"  rerender="{!RerenderPage}"/>
+                    <apex:commandButton value="Save" action="{!save}" rerender="true"/>
+                    <apex:commandButton value="Cancel" action="{!cancel}" rerender="true"/>
+                </apex:pageBlockButtons>
+                
+                <apex:pageBlockSection title="SPR Header" id="sprHdrs">
+                    <apex:repeat value="{!$ObjectType.TAMS_Special_Pricing_Request__c.FieldSets.SPR_Header}" var="field" id="sprHeader">
+                        <apex:inputField value="{!TAMS_Special_Pricing_Request__c[field]}" required="{!field.required}"/>
+                    </apex:repeat>
+                </apex:pageBlockSection> 
+                <apex:pageBlockSection title="Additional Information" >
+                    <apex:repeat value="{!$ObjectType.TAMS_Special_Pricing_Request__c.FieldSets.SPR_additional_information}" var="field" id="sprAddInfo">
+                        <apex:inputField value="{!TAMS_Special_Pricing_Request__c[field]}" required="{!field.required}"/>
+                    </apex:repeat>
+                </apex:pageBlockSection>        
+                <apex:pageBlockSection id="HQ" title="HQ Only" rendered="{!IF($Profile.Name == 'System Administrator',true,false)||IF($Profile.Name == 'TAMS - Quoting',true,false)||IF($Profile.Name == 'TAMS - HQ (Forecast)',true,false)||IF($Profile.Name == 'TAMS - Marketing',true,false)}" >
+                    <apex:repeat value="{!$ObjectType.TAMS_Special_Pricing_Request__c.FieldSets.SPR_HQ_Only}" var="field" id="sprHQ">
+                        <apex:inputField value="{!TAMS_Special_Pricing_Request__c[field]}" required="{!field.required}"/>
+                    </apex:repeat> 
+                </apex:pageBlockSection>                
+            </apex:pageBlock> 
+        </apex:outputPanel>
+        
+        <apex:pageBlock title="Search Quotes to Add (if Bundled SPR)" id="QueryBlock">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Search" action="{!search}" rerender="{!RerenderPage}" id="search"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Search Quotes" columns="2">         
+                <apex:outputText value="Account" />
+                <apex:inputText value="{!queryAccount}" />
+                <apex:outputText value="SID" /> 
+                <apex:inputText value="{!querySID}" />
+                <apex:outputText value="Modality" />
+                <apex:inputText value="{!queryModality}" /> 
+                <apex:outputText value="Oracle Quote #" /> 
+                <apex:inputText value="{!queryQuoteNumber}" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+
+        
+        <apex:pageBlock title="Add Quotes (if Bundled SPR)" id="AddQueryBlock">
+            <apex:pageBlockButtons >
+                 <apex:commandButton value="Add Quote" action="{!addQuote}" rerender="{!RerenderPage}" id="add"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!queriedQuotes}" var="X" id="queryQuotes" width="100%">
+                <apex:column headerValue="Select">
+                    <apex:inputCheckbox value="{!X.selected}">
+                    </apex:inputCheckbox>
+                </apex:column>
+                <apex:repeat value="{!$ObjectType.TAMS_Quotes__c.FieldSets.Quote_Columns_for_SPR_Page}" var="fieldValue">
+                    <apex:column headerValue="{!fieldValue.Label}">
+                        <apex:outputField value="{!X.tamsQuote[fieldValue]}" />
+                    </apex:column>
+                </apex:repeat>              
+            </apex:pageBlockTable>
+            <apex:outputText value="Page # {!pageNumber}" />
+            <apex:panelGrid columns="4" id="panel">
+                <apex:commandLink action="{!first}">First</apex:commandLink>
+                <apex:commandLink action="{!previous}" rendered="{!hasPrevious}">Previous</apex:commandLink>
+                <apex:commandLink action="{!next}" rendered="{!hasNext}">Next</apex:commandLink>
+                <apex:commandLink action="{!last}">Last</apex:commandLink>
+            </apex:panelGrid>  
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="SPR Quotes Added to SPR" id="quotesBlock">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Remove Quote" action="{!removeQuote}" rerender="{!RerenderPage}"  id="remove"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Quotes Added to SPR" columns="1">
+                <apex:pageBlockTable value="{!sprQuotes}" var="q" id="quotes" width="100%">
+                    <apex:column headerValue="Select">
+                        <apex:inputCheckbox value="{!q.selected}">
+                        </apex:inputCheckbox>
+                    </apex:column>
+                    <apex:column headerValue="Quote #">
+                        <apex:outputLink value="{!IF(q.sprQuote.Id!=NULL,URLFOR($Action.SPR_Quote__c.Edit,q.sprQuote.Id),NULL)}">
+                            <apex:outputText value="{!q.sprQuote.Name}">
+                            </apex:outputText>                              
+                        </apex:outputLink>
+                    </apex:column>
+                    <apex:repeat value="{!$ObjectType.SPR_Quote__c.FieldSets.SPR_Quotes_FieldSet}" var="fieldValue">
+                        <apex:column headerValue="{!fieldValue.Label}">
+                            <apex:actionRegion >
+                            <apex:inputCheckbox value="{!q.primarySelected}" Rendered="{!fieldValue.Label=='Primary' && q.SprQuote[fieldValue]==false}">
+                                <apex:actionSupport event="onchange" action="{!switchPrimary}">
+                                </apex:actionSupport>   
+                            </apex:inputCheckbox>
+                            </apex:actionRegion>
+                            <apex:outputField value="{!q.SprQuote[fieldValue]}" Rendered="{!NOT(fieldValue.Label=='Primary' && q.SprQuote[fieldValue]==false)}"/>
+                        </apex:column>
+                    </apex:repeat>
+                </apex:pageBlockTable>  
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>    
+</apex:page>

@@ -1,0 +1,12 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+<aura:html tag="style">
+    div.modal-container.slds-modal__container{
+        max-width: 3000px !important;
+        width: 925px !important;
+}
+</aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <iframe src ="{!'/apex/SalesCoachV2?id=' + v.recordId}" style="height:700px;width:925px" frameBorder="0">
+        <p>Your browser does not support iframes.</p>
+    </iframe>
+</aura:component>

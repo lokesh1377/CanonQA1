@@ -1,0 +1,83 @@
+<apex:page controller="TamsCommunityServiceAgreementsCTRL" sidebar="true" showHeader="true" id="pageId" readOnly="true"  lightningStyleSheets="true">
+    <apex:form id="formId">
+    <apex:messages />
+    <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="pbId" />
+    <apex:actionFunction name="applyFilter" action="{!resetFilter}" status="fetchStatus" reRender="pbId"/>
+    <apex:pageBlock >
+
+    </apex:pageBlock>
+        <apex:pageBlock id="pbId">
+                <apex:pageBlockSection id="ps" title="Filter By" columns="2">
+
+
+                    <apex:inputText value="{!modality}" label="Modality" />
+                    <!-- Its dummy date to show date picker. Date_Case_Working__c field is just used to get Date value entered-->
+
+                    <apex:inputField value="{!dummySAForContractStartFromDate.Quote_Signed_Date__c}" label="Contract Start Date From"/>
+                    <apex:inputText value="{!SID}" label="SID" />  
+                    <apex:inputField value="{!dummySAForContractStartToDate.Quote_Signed_Date__c}" label="Contract Start Date To" />
+                    <apex:inputText value="{!nickName}" label="Nickname" />
+                    <apex:inputField value="{!dummySAForContractEndFromDate.Quote_Signed_Date__c}" label="Contract End Date From" />
+                    <apex:inputText value="{!accountName}" label="Account Name"/>  
+                    <apex:inputField value="{!dummySAForContractEndToDate.Quote_Signed_Date__c}" label="Contract End Date To" />
+                    <apex:inputText value="{!Status}" label="Status"/>  
+                    <apex:outputLabel value="  "/>
+                    <apex:pageBlockSectionItem >
+	                    <apex:outputPanel style="position:relative;left:230px;">
+	                        <apex:commandButton action="{!filter}" value="Filter"/>    
+	                        <apex:commandButton action="{!resetFilter}" value="Clear"/>
+	                    </apex:outputPanel>
+                    </apex:pageBlockSectionItem>	
+                </apex:pageBlockSection>
+                <script> twistSection(document.getElementById('{!$Component.pbId.ps}').getElementsByTagName('img')[0]) </script>
+                <apex:pageBlockSection title="Service Agreements" collapsible="false" columns="1">
+                
+                <apex:pageBlockTable title="Service Agreements" value="{!serviceAgreements}" var="sa">
+					<apex:repeat value="{!$ObjectType.ServiceContract.FieldSets.SERVICE_CONTRACT_FS}" var="f" > 
+        				
+	                    <apex:column value="{!sa[f]}" rendered="{!f.FieldPath!='Name'}">
+	                    	<apex:facet name="header">
+	                            <apex:commandLink action="{!sortByField}" reRender="pbId" value="{!SUBSTITUTE(f.Label,'Account ID','Account Name')}">
+	                            	<apex:param name="fieldName" value="{!f.FieldPath}"></apex:param>
+	                            </apex:commandLink>
+	                        </apex:facet>                    
+	                    </apex:column>
+	                    <apex:column rendered="{!f.FieldPath=='Name'}">
+	                    	<apex:facet name="header">
+	                            <apex:commandLink action="{!sortByField}" reRender="pbId" value="{!SUBSTITUTE(f.Label,'Account ID','Account Name')}">
+	                            	<apex:param name="fieldName" value="{!f.FieldPath}"></apex:param>
+	                            </apex:commandLink>
+	                        </apex:facet>                    
+               				<apex:outputLink value="{!URLFOR($Action.ServiceContract.View,sa.ID)}" >{!sa.Name}</apex:outputLink>
+	                    </apex:column>	                            				
+    				</apex:repeat> 
+    			</apex:pageBlockTable>
+
+                <apex:panelGrid columns="8" rendered="{!totalRecords>0}"> 
+                 
+                    <apex:selectList value="{!pageSize}" multiselect="false" size="1" onchange="refreshPageSize();" >
+                        <apex:selectOptions value="{!paginationSizeOptions}"/>
+                    </apex:selectList>
+                    
+                    <apex:outputText value="{!((pageNumber-1)*pageSize)+1}-{!IF(pageNumber*pageSize>totalRecords,totalRecords,pageNumber*pageSize)} of {!totalRecords}"/>
+                     <apex:commandButton status="fetchStatus" reRender="pbId" value="|<" action="{!setCon.first}" disabled="{!!setCon.hasPrevious}" title="|<"/> 
+      
+                    <apex:commandButton status="fetchStatus" reRender="pbId" value="<" action="{!setCon.previous}" disabled="{!!setCon.hasPrevious}" title="<"/> 
+      
+                    <apex:commandButton status="fetchStatus" reRender="pbId" value=">" action="{!setCon.next}" disabled="{!!setCon.hasNext}" title=">"/> 
+      
+                    <apex:commandButton status="fetchStatus" reRender="pbId" value=">|" action="{!setCon.last}" disabled="{!!setCon.hasNext}" title=">|"/> 
+                    <apex:outputText value="Page {!pageNumber} of {!totalPages}" />
+                    <apex:outputPanel >                      
+                        <apex:actionStatus id="fetchStatus" >
+                            <apex:facet name="start" >
+                              <img src="/img/loading.gif" />                    
+                            </apex:facet>
+                        </apex:actionStatus>
+                    </apex:outputPanel> 
+              </apex:panelGrid>                            
+              <apex:outputText value="No matches found." rendered="{!totalRecords==0}"/>
+            </apex:pageBlockSection>  
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,275 @@
+<apex:page standardController="Install_Base_TAMS__c" extensions="TamsVLWakeupDataChatExt">
+
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/highcharts.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/highcharts-more.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.HighCharts,'Highcharts-4.1.7_Small/js/modules/exporting.js')}" />
+
+ 
+ <script type="text/javascript">
+  $(function() {  
+    $('#VLWDFrontalPie').highcharts ({         
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+           },                  
+        title: {
+             text: '',
+             x:-20                
+           },      
+        tooltip: {
+                   pointFormat: '{name}'
+           },
+   plotOptions:  {
+      pie: {
+         allowPointSelect: true,
+         cursor: 'pointer',                 
+         dataLabels: {
+            enabled: false           
+         },
+         showInLegend: false    
+      }
+   },
+   credits: {
+           enabled: false
+      },  
+   exporting: { 
+           enabled: false 
+      },       
+   series: [{
+      type: 'pie',
+      name: 'Frontal',
+      data: [
+          {  y: 1,
+             name: "",
+             color: "White"     
+          },           
+          {  y: 6,
+             name: "{!F_REC_kV_Name}",
+             color: "{!F_Rec_kV}"
+          },     
+         {  y: 6,
+             name: "{!F_REC_mA_Name}",
+             color: "{!F_Rec_mA}"
+          },
+          {  y: 6,
+             name: "{!F_REC_Msec_Name}",
+             color: "{!F_Rec_msec}"     
+          },         
+          {  y: 6,
+             name: "{!F_REC_Dose_Name}",
+             color: "{!F_Rec_Dose}"     
+          },
+          {  y: 6,
+             name: "{!F_REC_Pix_Name}",
+             color: "{!F_Rec_Pix}"     
+          },
+          {  y: 1,
+             name: "",
+             color: "White"     
+          },           
+          {  y: 6,
+             name: "{!F_DA_kV_Name}",
+             color: "{!F_DA_kV}"
+          },   
+          {  y: 6,
+             name: "{!F_DA_mA_Name}",
+             color: "{!F_DA_mA}"
+          },
+          {  y: 6,
+             name: "{!F_DA_Msec_Name}",
+             color: "{!F_DA_msec}"     
+          },          
+          {  y: 6,
+             name: "{!F_DA_Dose_Name}",
+             color: "{!F_DA_Dose}"     
+          },
+          {  y: 6,
+             name: "{!F_DA_Pix_Name}",
+             color: "{!F_Rec_Pix}"     
+          },   
+          {  y: 1,
+             name: "",
+             color: "White"     
+          },           
+          {  y: 6,
+             name: "{!F_DSA_kV_Name}",
+             color: "{!F_DSA_kV}"
+          },   
+          {  y: 6,
+             name: "{!F_DSA_mA_Name}",
+             color: "{!F_DSA_mA}"
+          },
+          {  y: 6,
+             name: "{!F_DSA_Msec_Name}",
+             color: "{!F_DSA_msec}"     
+          },          
+          {  y: 6,
+             name: "{!F_DSA_Dose_Name}",
+             color: "{!F_DSA_Dose}"     
+          },
+          {  y: 6,
+             name: "{!F_DSA_Pix_Name}",
+             color: "{!F_DSA_Pix}"     
+          }                                    
+       ]     
+     }]         
+    });
+  });
+ </script>
+
+
+ <script type="text/javascript">
+  $(function() {  
+    $('#VLWDLateralPie').highcharts ({         
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+           },                  
+        title: {
+             text: '',
+             x:-20                
+           },      
+        tooltip: {
+                   pointFormat: '{name}'
+           },
+   plotOptions:  {
+      pie: {
+         allowPointSelect: true,
+         cursor: 'pointer',                 
+         dataLabels: {
+            enabled: false           
+         },
+         showInLegend: false    
+      }
+   },
+   credits: {
+           enabled: false
+      },  
+   exporting: { 
+           enabled: false 
+      },       
+   series: [{
+      type: 'pie',
+      name: 'Frontal',
+      data: [
+          {  y: 1,
+             name: "",
+             color: "White"     
+          },           
+          {  y: 6,
+             name: "{!L_REC_kV_Name}",
+             color: "{!L_Rec_kV}"
+          },     
+         {  y: 6,
+             name: "{!L_REC_mA_Name}",
+             color: "{!L_Rec_mA}"
+          },
+          {  y: 6,
+             name: "{!L_REC_Msec_Name}",
+             color: "{!L_Rec_msec}"     
+          },         
+          {  y: 6,
+             name: "{!L_REC_Dose_Name}",
+             color: "{!L_Rec_Dose}"     
+          },
+          {  y: 6,
+             name: "{!L_REC_Pix_Name}",
+             color: "{!L_Rec_Pix}"     
+          },
+          {  y: 1,
+             name: "",
+             color: "White"     
+          },           
+          {  y: 6,
+             name: "{!L_DA_kV_Name}",
+             color: "{!L_DA_kV}"
+          },   
+          {  y: 6,
+             name: "{!L_DA_mA_Name}",
+             color: "{!L_DA_mA}"
+          },
+          {  y: 6,
+             name: "{!L_DA_Msec_Name}",
+             color: "{!L_DA_msec}"     
+          },          
+          {  y: 6,
+             name: "{!L_DA_Dose_Name}",
+             color: "{!L_DA_Dose}"     
+          },
+          {  y: 6,
+             name: "{!L_DA_Pix_Name}",
+             color: "{!L_Rec_Pix}"     
+          },   
+          {  y: 1,
+             name: "",
+             color: "White"     
+          },           
+          {  y: 6,
+             name: "{!L_DSA_kV_Name}",
+             color: "{!L_DSA_kV}"
+          },   
+          {  y: 6,
+             name: "{!L_DSA_mA_Name}",
+             color: "{!L_DSA_mA}"
+          },
+          {  y: 6,
+             name: "{!L_DSA_Msec_Name}",
+             color: "{!L_DSA_msec}"     
+          },          
+          {  y: 6,
+             name: "{!L_DSA_Dose_Name}",
+             color: "{!L_DSA_Dose}"     
+          },
+          {  y: 6,
+             name: "{!L_DSA_Pix_Name}",
+             color: "{!L_DSA_Pix}"     
+          }                                    
+       ]     
+     }]         
+    });
+  });
+ </script>
+
+   <apex:pageBlock >
+    <apex:pageBlockSection columns="3" title="VL Wake Up Data Snapshot">
+      <apex:pageBlockSectionItem rendered="{!(SystemType<>'')}" >        
+        <table>
+           <tr><td><div id="VLWDFrontalPie" style= "min-width: 300px; height: 250px; float: left"/>  </td></tr>        
+           <tr><td align="Center"><b>Frontal</b></td></tr>
+        </table>        
+      </apex:pageBlockSectionItem> 
+      <apex:pageBlockSection columns="1" rendered="{!(SystemType<>'')}">
+        <apex:pageBlockSectionItem >
+          <apex:outputText value="Reading Date : {!readingDate}"/>
+        </apex:pageBlockSectionItem>   
+        <apex:pageBlockSectionItem >
+          <apex:outputText value="Base Date    : {!baseDate}"/>
+        </apex:pageBlockSectionItem>              
+        <apex:pageBlockSectionItem >
+          <apex:outputText value="Tube Type    : {!TubeType}"/>
+        </apex:pageBlockSectionItem>   
+        <apex:pageBlockSectionItem >
+          <apex:outputText value="System Type  : {!SystemType }"/>
+        </apex:pageBlockSectionItem>  
+        <apex:pageBlockSectionItem >
+          <apex:outputText value=""/>
+        </apex:pageBlockSectionItem>  
+        <apex:pageBlockSectionItem >
+          <apex:outputLink value="https://360connect.force.com/{!vlwdid}" target="_blank" style="color:blue"> Wake Up Data Details</apex:outputLink> 
+        </apex:pageBlockSectionItem> 
+      </apex:pageBlockSection>                            
+      <apex:pageBlockSectionItem rendered="{!(SystemType='BP')}" >
+        <table>
+           <tr><td><div id="VLWDLateralPie" style="min-width: 300px; height: 250px; float: left"/> </td></tr>        
+           <tr><td align="Center"><b>Lateral</b></td></tr>
+        </table>         
+      </apex:pageBlockSectionItem>       
+    </apex:pageBlockSection>      
+  </apex:pageBlock>  
+
+</apex:page>

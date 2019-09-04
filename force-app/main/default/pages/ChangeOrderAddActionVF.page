@@ -1,0 +1,263 @@
+<!--*********************************************************
+        Author:         
+        Purpose: This VisualForce Page is for Adding Item in Change order Lines on change Order.        
+        1.0 -                -            - Created
+        1.1 - Lokesh Tigulla - 02/19/2019 - updated
+        1.2 - Lokesh Tigulla - 03/29/2019 - updated(Enabled Visualforce pages to lightning compatibility)
+**********************************************************-->
+<apex:page standardController="TAMS_ROA__c" extensions="ChangeOrderAddActionCTRL" showHeader="true" sidebar="true" lightningStylesheets="true">
+    <apex:form id="AddItemForm"> 
+        <apex:pageMessages />
+         <apex:sectionHeader title="Add items to Change Order Lines">
+          <apex:commandLink action="{!back}" value="Back to Change Order" id="theCommandLink"/>
+            <apex:pageBlock >
+                <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Change Order #"/>
+                        <apex:outputField value="{!roa.Name}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="Customer Name"/>
+                        <apex:outputField value="{!roa.Account__c}" />
+                    </apex:pageBlockSectionItem>
+                       <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Order Number"/> 
+                        <apex:selectList value="{!selectorders1}" multiselect="false" size="1">
+                        <apex:selectOptions value="{!ord}"/>
+                        <apex:actionSupport event="onchange" action="{!orderchange}" reRender="AddItemForm"/>
+                      <!--    <label style="padding-left:15em">Order Number</label> -->
+                     </apex:selectList>
+                    </apex:pageBlockSectionItem>
+                      <apex:pageBlockSectionItem >
+                        <apex:outputText value="SID"/>
+                        <apex:outputField value="{!roa.Change_Order_SID__c}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="QFA Discount %"/>
+                        <apex:outputText value="{!qfaDiscountPercentage}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    <apex:outputText value="Modality"/>
+                   <apex:outputText value="{!modality}" /> 
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Booked Date"/>
+                   <apex:outputText value="{0,date,MM/dd/yyyy}"> 
+                      <apex:param value="{!orderBookedDate}" />
+                  </apex:outputText>
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Type"/>
+                   <apex:outputText value="{!orderType}" /> 
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Status"/>
+                   <apex:outputText value="{!orderStatus}" /> 
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Booked Amount"/>
+                   <apex:outputText value="{0, Number, Currency}">
+                   <apex:param value="{!orderBookedAmount}"/>
+                   </apex:outputText>
+                </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>               
+            </apex:pageBlock>            
+            <apex:pageBlock >
+                <apex:pageBlockSection >
+                    <apex:pageBlockSectionItem rendered="{!changeRequestedBy}">
+                            <apex:outputLabel value="Item #" />
+                            <apex:outputPanel layout="block" >
+                            <apex:inputHidden value="{!bookId}" id="inputid" />
+                            <apex:inputText size="20" value="{!ItemNumber}" id="inputname"/>
+                            <a href="#"  onclick="openLookupPopup('{!$Component.inputname}', '{!$Component.inputid}','ItemMaster__c', 'Name','SELECT Id,Name,Description__c,Status_Code__c FROM ItemMaster__c where Item_Type__c != \'TAMS PTO Model\' AND Item_Number__c','Name:Name;Description__c:Description;Status_Code__c:Status;','Name');return false ">
+                            <!-- <img src="/img/s.gif" alt="Parent Account Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Parent Account Lookup (New Window)"/> -->
+                            <!--  <apex:image url="{!URLFOR($Resource.cwbtool__SLDS,'SLDS/assets/icons/utility/search_60.png')}" width="17" height="17" style="margin-bottom: -1%;"/> -->
+                            <apex:image url="{!URLFOR($Resource.GraphicsPackNew,'fatcow/farmfresh/32/zoom.png')}" width="17" height="17" style="margin-bottom: -1%;"/>
+                            </a>
+                            </apex:outputPanel>
+                    </apex:pageBlockSectionItem> 
+                    <apex:pageBlockSectionItem rendered="{!internal}">
+                            <apex:outputLabel value="Item #"/>
+                            <apex:outputPanel layout="block">
+                            <apex:inputHidden value="{!bookId}" id="inputid" />
+                            <apex:inputText size="20" value="{!ItemNumber}" id="inputname"/>
+                            <a href="#"  onclick="openLookupPopup('{!$Component.inputname}', '{!$Component.inputid}','ItemMaster__c', 'Name','SELECT Id,Name,Description__c,Item_Cost__c,Status_Code__c FROM ItemMaster__c where Item_Type__c != \'TAMS PTO Model\' AND Item_Number__c','Name:Name;Description__c:Description;Item_Cost__c:Item Cost;Status_Code__c:Status;','Name');return false ">
+                            <!-- <img src="/img/s.gif" alt="Parent Account Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Parent Account Lookup (New Window)"/> -->
+                            <!--  <apex:image url="{!URLFOR($Resource.cwbtool__SLDS,'SLDS/assets/icons/utility/search_60.png')}" width="17" height="17" style="margin-bottom: -1%;"/> -->
+                            <apex:image url="{!URLFOR($Resource.GraphicsPackNew,'fatcow/farmfresh/32/zoom.png')}" width="17" height="17" style="margin-bottom: -1%;"/>
+                            </a>
+                            </apex:outputPanel>
+                    </apex:pageBlockSectionItem>   
+                     <apex:pageBlockSectionItem >
+                       <apex:outputLabel value="Description"/>
+                            <apex:outputPanel layout="block">
+                            <apex:inputHidden value="{!bookId}" id="inputid" />
+                            <apex:inputText size="20" value="{!Description}" id="inputdescription"/>
+                            <a href="#" onclick="openLookupPopup('{!$Component.inputdescription}', '{!$Component.inputid}','ItemMaster__c', 'Description__c','SELECT Id,Description__c,Name,Status_Code__c FROM ItemMaster__c where Item_Type__c != \'TAMS PTO Model\' AND Description__c','Description__c:Description;Name:Name;Status_Code__c:Status;','Description__c');return false ">
+                            <!-- <img src="/img/s.gif" alt="Parent Account Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Parent Account Lookup (New Window)"/> -->
+                            <!--  <apex:image url="{!URLFOR($Resource.cwbtool__SLDS,'SLDS/assets/icons/utility/search_60.png')}" width="17" height="17" style="margin-bottom: -1%;"/> -->
+                            <apex:image url="{!URLFOR($Resource.GraphicsPackNew,'fatcow/farmfresh/32/zoom.png')}" width="17" height="17" style="margin-bottom: -1%;"/>
+                            </a>
+                            </apex:outputPanel>
+                    </apex:pageBlockSectionItem>                         
+                </apex:pageBlockSection>
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton action="{!search}" value="Search" reRender="AddItemForm" disabled="{!isEditable}"/>
+                    <apex:commandButton value="Clear" onclick="this.form.reset();return false;"/>
+                    <apex:commandButton action="{!back}" value="Save"/>
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:sectionHeader>
+         <apex:pageBlock title="Select items">
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!saveOrderLines}" value="Add"  reRender="AddItemForm" disabled="{!isEditable}" style="margin-left:5%;"/>
+            </apex:pageBlockButtons>        
+            <apex:pageBlockTable value="{!itemMasters}" var="itemMaster" width="100%" id="pageBlockSection">
+                <apex:column headerValue="Select">
+                    <apex:actionRegion >
+                       <apex:inputCheckbox value="{!itemMaster.isSelected}" >
+                            <!--<apex:actionSupport event="onchange" action="{!selectCheckboxChanged}">
+                            </apex:actionSupport>   -->
+                        </apex:inputCheckbox>
+                    </apex:actionRegion>                    
+                </apex:column>      
+                <apex:column headerValue="Item Number">
+                    <apex:outputField value="{!itemMaster.itMaster.Item_Number__c}" />
+                </apex:column>      
+                <apex:column headerValue="Item Descrption">
+                    <apex:outputField value="{!itemMaster.itMaster.Description__c}" />
+                </apex:column>   
+                <apex:column headerValue="Item Cost" rendered="{!internal}">
+                    <apex:outputField value="{!itemMaster.itMaster.Item_Cost__c}" />
+                </apex:column>   
+                                     
+                <apex:column headerValue="List Price">
+                 <apex:outputText value="{0,number,$#,##,###.##}">
+               <apex:param value="{!itemMaster.listPrice}" />
+              </apex:outputText>
+                </apex:column>  
+                <apex:column headerValue="Suggested Selling Price" rendered="{!changeRequestedBy}">
+                <apex:outputText value="{0,number,$#,##,###.##}">
+               <apex:param value="{!itemMaster.suggestedSellingPrice}" />
+              </apex:outputText>
+              </apex:column>
+                <apex:column headerValue="Selling Price" rendered="{!changeRequestedBy}">
+                    <apex:inputText value="{!itemMaster.sellingPrice}" style="max-width:100px" />       
+                </apex:column> 
+                 <apex:column headerValue="Reason Code" rendered="{!internal}">
+                    <apex:inputField value="{!itemMaster.changeOrderLines.COL_Reason_Code__c}" />
+                </apex:column>  
+                 <apex:column headerValue="Comments" >
+                    <apex:inputField value="{!itemMaster.changeOrderLines.COL_Comments__c}" />       
+                </apex:column>             
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <apex:pageBlock title="Added Items">
+         <apex:pageBlockButtons location="bottom">
+            <apex:commandButton action="{!removeitem}" value="Remove Items" reRender="AddItemForm" disabled="{!isEditable}" style="margin-left: 2%;"/>
+             </apex:pageBlockButtons> 
+              <apex:pageBlockTable value="{!ChangeOrderLines}" var="Co" width="100%" >
+                <apex:column headerValue="Select">
+                    <apex:actionRegion >
+                       <apex:inputCheckbox value="{!Co.isSelected}">
+                        </apex:inputCheckbox>
+                    </apex:actionRegion>                    
+                </apex:column>      
+         <apex:column headerValue="Item Number">
+             <apex:outputField value="{!Co.troaline.COL_Old_Item__c}" /> 
+              </apex:column>      
+          <apex:column headerValue="Item Description">
+             <apex:outputField value="{!Co.troaline.Item_Description__c}" /> 
+             </apex:column>  
+              <apex:column headerValue="Item Cost" rendered="{!internal}">
+             <apex:outputField value="{!Co.troaline.COL_Old_Item_Cost__c}" /> 
+             </apex:column> 
+              <apex:column headerValue="BTL">
+             <apex:outputField value="{!Co.troaline.COL_BTL__c }" /> 
+             </apex:column> 
+              <apex:column headerValue="Order #">
+             <apex:outputField value="{!Co.troaline.Order_Number__c}" /> 
+             </apex:column>                            
+             <apex:column headerValue="List Price">
+             <apex:outputText value="{0, Number, Currency}">
+              <apex:param value="{!Co.troaline.List_Price__c}" />
+          </apex:outputText>
+            </apex:column>   
+            <apex:column headerValue="Suggested Selling Price" rendered="{!changeRequestedBy}">
+             <apex:outputField value="{!Co.troaline.COL_Suggested_Selling_Price__c}" />              
+                </apex:column>        
+            <apex:column headerValue="Selling Price" rendered="{!changeRequestedBy}">
+             <apex:outputField value="{!Co.troaline.New_Selling_Price__c}" />              
+                </apex:column> 
+                <apex:column headerValue="Reason Code" >
+             <apex:outputField value="{!Co.troaline.COL_Reason_Code__c}" />              
+                </apex:column> 
+                <apex:column headerValue="Comments" >
+             <apex:outputField value="{!Co.troaline.COL_Comments__c}" />              
+                </apex:column> 
+              </apex:pageBlockTable>
+            </apex:pageBlock>
+       
+        <apex:pageBlock title="Order Lines Master">
+              <apex:pageBlockTable value="{!OrderLinesMaster}" var="OL" width="100%" >     
+         <apex:column headerValue="Line Number">
+             <apex:outputField value="{!OL.odmline.Line_Number__c}" /> 
+              </apex:column>      
+          <apex:column headerValue="Item Number">
+             <a href="#"  onclick="myFunction('{!baseUrl}/{!OL["odmline.Ordered_Item__c"]}')">{!OL['odmline.Ordered_Item__r.Name']}</a>
+             </apex:column>
+             <apex:column headerValue="Description">
+             <apex:outputField value="{!OL.odmline.Item_Description__c}" /> 
+             </apex:column> 
+             <apex:column headerValue="Quantity">
+             <apex:outputField value="{!OL.odmline.Quantity__c}" /> 
+             </apex:column> 
+             <apex:column headerValue="UOM">
+             <apex:outputField value="{!OL.odmline.UOM__c}" /> 
+             </apex:column> 
+             <apex:column headerValue="List Number">
+             <apex:outputField value="{!OL.odmline.Item_List_Price__c}" /> 
+             </apex:column> 
+             <apex:column headerValue="Selling Price">
+             <apex:outputField value="{!OL.odmline.Item_Selling_Price__c}" /> 
+             </apex:column>                                                
+              </apex:pageBlockTable>
+            </apex:pageBlock>
+    </apex:form>    
+<script type="text/javascript">
+var newWin=null;
+function openLookupPopup(name,id, objectName, fieldName, query, listofcolumns,orderBy)
+{ 
+var inid1value = "{!bookId}";
+var innamevalue = "{!ItemNumber}"; 
+console.log('**',document.getElementById(name).value); 
+//var inid1=document.getElementById("{!$Component.page1.formid.block1.sec1.item1.inputid}").value;
+//var inname=document.getElementById("{!$Component.page1.formid.block1.sec1.item1.inputname}").value;
+var inid1=inid1value;
+var inname=innamevalue;
+var sobjectName = objectName;
+var fieldName = fieldName;
+var url="/apex/ChangeOrderlookupVF?namefield=" + name + "&idfield=" +id+"&parentid="+inid1+"&parentname="+document.getElementById(name).value+"&sObject="+sobjectName+"&fieldName="+fieldName+"&query="+query+"&listofcolumns="+listofcolumns+"&orderBy="+orderBy;
+newWin=window.open(url, 'Popup','height=500,width=600,left=100,top=100,resizable=no,scrollbars=yes,toolbar=no,status=no');
+if (window.focus)
+{
+newWin.focus();
+}
+ 
+return false;
+}
+ 
+function closeLookupPopup()
+{
+if (null!=newWin)
+{
+newWin.close();
+}
+}
+ </script> 
+ <script>
+       function myFunction(recordId){
+        window.open(recordId,'_blank');
+       }
+   </script>
+</apex:page>

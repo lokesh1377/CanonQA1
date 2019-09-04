@@ -1,0 +1,2 @@
+<apex:page standardController="Order_Financial_Analysis__c" recordSetVar="a"
+action="{!URLFOR($Action.Order_Financial_Analysis__c.List,$ObjectType.Order_Financial_Analysis__c)}" />

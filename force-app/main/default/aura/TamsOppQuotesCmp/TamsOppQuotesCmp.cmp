@@ -1,0 +1,5 @@
+<aura:component implements="force:appHostable,force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.showQuotes}"/> 
+  	<aura:registerEvent name="getQuotesEvent" type="c:TamsOppQuotesEVT"/> 
+  	<c:TamsOppViewQuotesCMP />
+</aura:component>

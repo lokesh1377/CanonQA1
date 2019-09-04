@@ -1,0 +1,104 @@
+<!--*********************************************************
+        Author:         
+        Purpose: This VisualForce Page is for CustomLookup.        
+        1.0 - Lokesh Tigulla -            - Created
+        1.1 - Lokesh Tigulla - 01/19/2019 - updated
+**********************************************************-->
+<apex:page controller="ChangeOrderlookupcontroller" title="Search Result" showHeader="false">
+    <apex:form title="Search Result">
+        <apex:pageBlock title="Search">
+            
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:inputText value="{!searchvalue}">
+                        <apex:actionSupport event="onkeyup" action="{!onkeyupAction}" reRender="one" />
+                        <apex:actionSupport event="onchange" action="{!onkeyupAction}" reRender="one" />
+                      </apex:inputText>
+                    <apex:commandButton value="Go" action="{!searchAction}" />
+                    
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:form title="Child Page" id="one">
+        <apex:pageBlock title="Details" rendered="{!render1}">
+            <apex:pageMessages ></apex:pageMessages>
+           <table class="tablecss">
+              <tbody>
+                <tr class="headerRow">
+                <apex:repeat value="{!lLabel}" var="label">
+                  <th class="headerrowcss">
+                    {!label}
+                  </th>
+              </apex:repeat>
+            </tr>
+            <apex:repeat value="{!lDynamicWrapper}" var="dynamicWrapper">
+            <tr>
+              <td class="datarowcss">
+                <a href='#' onclick="fillIn('{!dynamicWrapper.name}','{!dynamicWrapper.id}')">
+                  {!dynamicWrapper.name}
+                </a>
+              </td>
+               <apex:repeat value="{!dynamicWrapper.lValues}" var="value">
+               <td class="datarowcss">
+                 {!value} 
+               </td>
+             </apex:repeat>
+            </tr>
+          </apex:repeat>
+              </tbody>
+            </table>
+        </apex:pageBlock>
+    </apex:form>
+    <script type="text/javascript">
+    function fillIn(name, id) { 
+      var winMain=window.opener; 
+      if (null==winMain) { 
+        winMain=window.parent.opener; 
+      } 
+      var ele=winMain.document.getElementById('{!$CurrentPage.parameters.namefield}'); 
+      ele.value=name; 
+      ele=winMain.document.getElementById('{!$CurrentPage.parameters.idfield}'); 
+      ele.value=id;
+      winMain.closeLookupPopup(winMain.document.getElementById('{!$CurrentPage.parameters.idfield}')); 
+    } 
+    function CloseWindow() { 
+      var winMain=window.opener; 
+      if (null==winMain) { 
+        winMain=window.parent.opener; 
+      } 
+      winMain.closeLookupPopup(winMain.document.getElementById('{!$CurrentPage.parameters.idfield}')); 
+    }
+    </script>
+    <style>
+    .headerrowcss{
+      background: #f2f3f3;
+      border-width: 0 0 1px 1px;
+      border-color: #e0e3e5;
+      color: #000;
+      font-size: .9em;
+      font-weight: bold;
+      padding: 5px 2px 4px 5px;
+    }
+    .datarowcss{
+      border-bottom-width: 0;
+      border-width: 0 0 1px 0;
+    vertical-align: middle;
+    border: 1px solid #ededed;
+    color: #000;
+    padding: 4px 2px 4px 5px;
+    font-family: Arial,Helvetica,sans-serif;
+    display: table-cell;
+    margin: 0;
+    }
+    .tablecss{
+      border: 1px solid #e0e3e5;
+      background-color: #fff;
+      width: 100%;
+      -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    display: table;
+    border-collapse: separate;
+    }
+    </style>
+</apex:page>

@@ -1,0 +1,40 @@
+<apex:page showHeader="true" sidebar="true" standardController="Install_Base_TAMS__c" extensions="TamsMainGraphsCTRL">
+  <apex:form >
+       <style> 
+         .fewerMore { display: none;}
+         form, html {
+         background: white !important;
+         }
+       </style>
+ 
+     <apex:pageMessages />
+      <apex:pageBlock title="Equipment:{!ibRecord.name} Nickname:{!ibRecord.Nickname__c} ">
+         <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!returnBack}" value="Return" />
+         </apex:pageBlockButtons>        
+      </apex:pageBlock>       
+  </apex:form>        
+
+    <apex:pageBlock >
+       <apex:pageBlockSection columns="1">  
+          <apex:pageBlockSectionItem dataTitle="CT Counter Reading" rendered="{!ibRecord.Modality_ALL__c == 'CT'}" >  
+             <apex:include pageName="TamsCTCounterGaugePage" rendered="{!ibRecord.Modality_ALL__c == 'CT'}" />
+          </apex:pageBlockSectionItem>        
+          <apex:pageBlockSectionItem dataTitle="MR System Snapshot" rendered="{!ibRecord.Modality_ALL__c == 'MR'}"  >  
+             <apex:include pageName="TamsTrendingDBChartPage" rendered="{!ibRecord.Modality_ALL__c == 'MR'}" />
+          </apex:pageBlockSectionItem>     
+          <!--apex:pageBlockSectionItem dataTitle="VL Wakeup Data Snapshot" rendered="{!ibRecord.Modality_ALL__c == 'VL'}" -->  
+             <!--apex:include pageName="TamsVLWakeUpDataPage" rendered="{!ibRecord.Modality_ALL__c == 'VL'}" /-->
+          <!--/apex:pageBlockSectionItem-->                        
+       </apex:pageBlockSection>
+       <apex:pageBlockSection columns="2" >     
+          <apex:pageBlockSectionItem dataTitle="Remote Connectiivty" rendered="{!ibRecord.Modality_ALL__c <> 'UL'}">
+             <apex:include pageName="TamsRemoteConnectivityTrafficLightsPage" />  
+          </apex:pageBlockSectionItem>                    
+          <apex:pageBlockSectionItem dataTitle="Uptime Report">   
+             <apex:include pageName="TamsUptimeReportChartPage" /> 
+          </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>            
+    </apex:pageBlock>
+                    
+</apex:page>

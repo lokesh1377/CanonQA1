@@ -1,0 +1,58 @@
+<apex:page standardController="Account" extensions="StrategyDashBoard" lightningstylesheets="true">
+    <style>
+        table { border-collapse: collapse; border-spacing: 0 }
+        td { padding: 0;background-size: cover; }
+    </style>
+    
+    <apex:form >
+    <!--  MAIN DASHBOARD GRAPH -->
+           
+                    <table width="100%">
+                        <tr>
+                            <td width="25%">&nbsp;</td>
+                            <td width="50%">
+                                <apex:repeat value="{!IBModalityGroups}" var="ModalityGroup">
+                                <table align="Center" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">      
+                                    <tr>
+                                        <td width = "5%">
+                                            <apex:outputText value="{!ModalityGroup.Modality}" style="color:black;font-weight:bold;"/>
+                                        </td>
+                                            <apex:repeat value="{!ModalityGroup.models}" var="model">
+                                                <apex:variable var="imageVar" value="{!model.backgroundImage}"/> 
+                                                <apex:variable var="imageURL" value="{!URLFOR($Resource.BackGroundColors, imageVar)}"/> 
+                                        <td valign="middle" width = "{!model.recordCount*95/ModalityGroup.TotalRecordCount}%" height = "40px" style = "border:1px solid black;background:url('{!imageURL}');font-weight:bold">
+                                            <center><apex:outputText value="{!model.recordCount}" style="vertical-align:center;color:black;"/></center>
+                                        </td>
+                                            </apex:repeat>
+                                    </tr>
+                                </table>
+                                </apex:repeat>
+                            </td>
+                            <td width="25%">
+                                <table align="Center" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">      
+                                    <tr>
+                                        <td width = "100%">
+                                           <!-- <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/00Oi00000066wpf?pv0={!left(Account.id,15)}" target="_blank">No Install Date Report</a></b>-->
+                                        </td>
+                                     </tr>      
+                                     <tr><td>&nbsp;</td></tr>  
+                                     <tr>
+                                        <td width = "100%">
+                                         <!--  <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/00Oi00000066wpg?pv0={!left(Account.id,15)}" target="_blank">No Install Year Report</a></b>-->
+                                        </td>
+                                    </tr>
+                                </table>  
+                            </td>                      
+                        </tr>                        
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td width="30%">&nbsp;</td>
+                            <td width="40%" align="Center">
+                                <apex:image value="{!$Resource.Legend_Bottom}" />
+                            </td>
+                            <td width="30%">&nbsp;</td>
+                        </tr>
+                    </table>
+    </apex:form>
+</apex:page>

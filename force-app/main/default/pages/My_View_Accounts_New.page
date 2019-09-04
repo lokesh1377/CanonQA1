@@ -1,0 +1,73 @@
+<apex:page controller="TamsCommunityAccounts" sidebar="true" showHeader="true" readOnly="true" lightningStyleSheets="true">
+    <apex:form >
+    <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="pbId"/>
+    <apex:actionFunction name="applyFilter" action="{!filter}" status="fetchStatus" reRender="pbId"/>
+        <apex:pageBlock id="pbId">
+
+                <apex:pageBlockSection id="ps" title="Filter By" columns="1">
+                    <apex:inputText value="{!filterByName}" label="Account Name"/>
+                    <apex:inputText value="{!filterByCity}" label="City" />
+                    <apex:inputText value="{!filterByState}" label="State"/>      
+                    <apex:outputPanel style="position:relative;left:230px;">
+                        <apex:commandButton action="{!filter}" value="Filter"/>    
+                        <apex:commandButton action="{!clearFilter}" value="Clear"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSection>
+                <script> twistSection(document.getElementById('{!$Component.pbId.ps}').getElementsByTagName('img')[0]) </script>
+                <apex:pageBlockSection title="My Accounts" collapsible="false" columns="1">
+                <!-- NOT NEEDED
+                    <apex:pageBlockSectionItem>
+                        <apex:selectList value="{!orderBy}" multiselect="false" size="1" onchange="applyFilter();">
+                            <apex:selectOptions value="{!orderByOptions}"/>
+                        </apex:selectList>
+                    </apex:pageBlockSectionItem>
+                -->
+                <apex:pageBlockTable title="Accounts" value="{!accounts}" var="a">
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!sortByName}" reRender="pbId">Account Name</apex:commandLink>
+                        </apex:facet>                    
+                        <apex:outputLink value="{!URLFOR($Action.Account.View,a.ID)}">{!a.name}</apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!a.ShippingStreet}" />
+                    <apex:column value="{!a.ShippingCity}" >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!sortByCity}" reRender="pbId">City</apex:commandLink>
+                        </apex:facet>
+                    </apex:column>                        
+                    <apex:column value="{!a.ShippingState}" >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!sortByState}" reRender="pbId">State</apex:commandLink>
+                        </apex:facet>                    
+                    </apex:column>    
+                    <apex:column value="{!a.ShippingPostalCode}" >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!sortByZip}" reRender="pbId">Zip</apex:commandLink>
+                        </apex:facet>                            
+                    </apex:column>                
+                </apex:pageBlockTable>
+                <apex:panelGrid columns="8"> 
+                 
+                <apex:selectList value="{!size}" multiselect="false" size="1" onchange="refreshPageSize();">
+                    <apex:selectOptions value="{!paginationSizeOptions}"/>
+                </apex:selectList>
+                 
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="|<" action="{!setCon.first}" disabled="{!!setCon.hasPrevious}" title="|<"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value="<" action="{!setCon.previous}" disabled="{!!setCon.hasPrevious}" title="<"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value=">" action="{!setCon.next}" disabled="{!!setCon.hasNext}" title=">"/> 
+  
+                <apex:commandButton status="fetchStatus" reRender="pbId" value=">|" action="{!setCon.last}" disabled="{!!setCon.hasNext}" title=">|"/> 
+                <apex:outputPanel >                      
+                    <apex:actionStatus id="fetchStatus" >
+                        <apex:facet name="start" >
+                          <img src="/img/loading.gif" />                    
+                        </apex:facet>
+                    </apex:actionStatus>
+                </apex:outputPanel> 
+              </apex:panelGrid>                            
+            </apex:pageBlockSection>  
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

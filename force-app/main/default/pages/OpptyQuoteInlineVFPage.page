@@ -1,0 +1,51 @@
+<!--------------------------------------------------------------
+        Author: XELLERATION
+        Purpose: To allow for a quick selection of the Primary 
+        checkbox on a quote through an inline VF Page on the Oppty.
+        1.0 - Brandon Cassis - 03/11/2015 - Created
+        1.1 - Hemant Kumar   - 03/22/2016 - Updated for Label QuoteID 
+        1.2 - Lokesh Tigulla - 07/17/2019 - Updated the code for opening quote record in the new window        
+--------------------------------------------------------------->
+
+<!--Use a standard controller with Extention to do Inline. -->
+<apex:page standardController="Opportunity" extensions="OpptyQuoteInlineController" sidebar="true" showHeader="true" lightningStylesheets="true">    
+    <apex:form >
+        <Apex:pageBlock title="Quotes" id="pageBlock">         
+            <apex:pageBlockTable value="{!pageQuoteList}" var="quote">
+                <apex:column headerValue="Action">
+                    <apex:outputLink target="_top" value="{!URLFOR($Action.TAMS_Quotes__c.Edit,quote.Id, [saveURL=URLFOR($Action.Opportunity.View,quote.Opportunity_Name__c), retURL=URLFOR($Action.Opportunity.View,quote.Opportunity_Name__c)])}"> 
+                         <apex:outputText value="Edit"/>
+                     </apex:outputLink>&nbsp;|&nbsp;
+                     <apex:outputLink target="_top" value="{!URLFOR($Action.TAMS_Quotes__c.Delete, quote.Id, [saveURL=URLFOR($Action.Opportunity.View,quote.Opportunity_Name__c), retURL=URLFOR($Action.Opportunity.View,quote.Opportunity_Name__c)])}">
+                         <apex:outputText value="Del"/>
+                     </apex:outputLink>
+                </apex:column>
+                <!--apex:column headerValue="{!$Label.CompassRecordId}"-->
+                <apex:column headerValue="QuoteID">
+                    <apex:outputLink target="_blank" value="{!'/'+quote.Id}"> 
+                         <apex:outputText value="{!quote.Name}"/>
+                    </apex:outputLink>
+                
+                </apex:column>
+                <!--Always need Primary with action support to save selection -->
+                <apex:column headerValue="Primary">
+                    <apex:inputCheckbox value="{!quote.Primary__c}">
+                        <apex:actionSupport event="onclick" action="{!savePrimaryQuote}" reRender="pageBlock">
+                            <apex:param name="quoteId" value="{!quote.Id}" assignTo="{!primaryQuoteId}"/>
+                        </apex:actionSupport>
+                    </apex:inputCheckbox>
+                </apex:column>
+                <apex:repeat value="{!fields}" var="f">
+                    <apex:column headerValue="{!f.label}">
+                        <apex:outputField value="{!quote[f]}"/>
+                    </apex:column>
+                </apex:repeat>      
+        </apex:pageBlockTable>
+      </Apex:pageBlock>
+  </apex:form>
+  <style type="text/css">
+   .slds-form-element__control.slds-grid.itemBody {
+    width: 100% !important;
+}
+</style>
+</apex:page>

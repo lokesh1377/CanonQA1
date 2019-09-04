@@ -1,0 +1,16 @@
+<apex:page >
+<style>
+    html .brandQuaternaryBgr {
+        background: #fff !important;
+        margin: auto;
+    }
+    
+    iframe#theiframe {
+        width: 1280px
+    }
+</style>
+
+<apex:form >
+    <iframe style="height: 465px; width: 1290px;" src="https://assets.tamsapps.com/sp_header/" scrolling="no" id="theIframe" frameborder="no" title="Banner Ad"></iframe>
+</apex:form>
+</apex:page>

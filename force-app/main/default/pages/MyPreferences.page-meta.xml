@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>34.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>Tab used in 360 Connect Community. Allows users to opt in or out certain emails such as service contract 90 day expiration date.</description>
+    <label>My Preferences</label>
+</ApexPage>

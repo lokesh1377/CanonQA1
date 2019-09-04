@@ -1,0 +1,30 @@
+<apex:page showHeader="true" sidebar="true" standardController="Install_Base_TAMS__c" extensions="TamsUptimeReportChartExtClass">
+<style>
+    .fewerMore { display: none;}
+    form, html {
+    background: white !important;
+    } 
+</style>  
+
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="1" title="Uptime Report">
+            <apex:pageBlockSectionItem dataTitle="">
+                <apex:chart data="{!uptimeData}" height="200" width="300">
+                    <apex:axis type="Numeric" position="left" title="Uptime %" grid="true" fields="Uptime_Percentage__c" minimum="0" maximum="100">
+                         <apex:chartLabel /> 
+                    </apex:axis>     
+                    <apex:axis type="Category" position="bottom" title="Year" grid="true" fields="Period_value__c">
+                         <apex:chartLabel />
+                    </apex:axis>            
+                    <apex:barSeries orientation="vertical" axis="left" xField="Period_value__c" yField="Uptime_Percentage__c" yPadding="2">
+                    </apex:barSeries>                     
+                </apex:chart>
+            </apex:pageBlockSectionItem>   
+            <apex:pageBlockSectionItem dataTitle="">   
+                <apex:outputText value="*Disclaimer : Uptime is calculated only for the years in which the system is covered by a full service agreement." />
+            </apex:pageBlockSectionItem>  
+        </apex:pageBlockSection>
+               
+    </apex:pageBlock>       
+    
+</apex:page>

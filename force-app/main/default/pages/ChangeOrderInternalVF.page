@@ -1,0 +1,103 @@
+<!--*********************************************************
+        Author: Lokesh Tigulla         
+        Purpose: This VisualForce Page is for Creating Change Order from the change order tab.        
+        1.0 - Lokesh Tigulla-04/03/2019 - Created
+**********************************************************-->
+<apex:page standardController="TAMS_ROA__c" extensions="ChangeOrderInternalCTRL" showHeader="true" sidebar="true" recordSetVar="new" lightningStylesheets="true">
+    <apex:form >
+        <apex:actionFunction name="changeOrd" action="{!changeorders}"/>
+    <apex:outputPanel id="hdrOutput">
+      <apex:pageBlock >
+       <apex:pageMessages />
+      <apex:pageBlockSection title="Creating Change Order Internal"  >
+         
+      <apex:outputPanel layout="block"  > 
+                            <div class="lookupclass">
+                            <apex:outputLabel value="SID" style="padding-left: 31%;"/>
+                            <apex:inputHidden value="{!sidNumberId}" id="inputid" />
+                            <apex:inputText size="20" value="{!sidNumber}" id="inputname"  styleClass="lookupinput" style="margin-left:3%;"/>
+                            <a href="#" onclick="openLookupPopup('{!$Component.inputname}', '{!$Component.inputid}', 'Order_Master__c', 'OM_SID__c', 'SELECT Id,Name,SID_Order__c,OM_SID__c,Order_Type__c,CMSU_Booked_Date__c,Modality_Order__c,Order_Status__c,Order_Subtotal__c,Customer_Name__r.Name FROM Order_Master__c where OM_SID__c','OM_SID__c:SID;Customer_Name__r.Name:Customer Name;Name:Order Number;Order_Type__c:Order Type;Modality_Order__c:Modality;Order_Status__c:Order Status;Order_Subtotal__c:Order Booking Amount;CMSU_Booked_Date__c:Order Booked Date;','SID_Order__c');return false ">
+                            <!--  <img src="/img/s.gif" alt="Parent Account Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Parent Account Lookup (New Window)"/>-->
+                             <apex:image url="{!URLFOR($Resource.GraphicsPackNew,'fatcow/farmfresh/32/zoom.png')}" width="17" height="17"/>
+                            </a>
+                        </div>
+    </apex:outputPanel> 
+    <apex:pageBlockSectionItem >
+       <apex:outputText value="Change Order Type"/>
+       <apex:OutputText Value="{!changeOrderType}"/>
+     </apex:pageBlockSectionItem>
+      <apex:pageBlockSectionItem >
+       <apex:outputText value="Change Required By"/>
+       <apex:OutputText Value="{!changeRequestedBy}"/>
+     </apex:pageBlockSectionItem>
+     <apex:pageBlockSectionItem >
+       <apex:outputText value="Rush"/>
+       <apex:inputField Value="{!newChangeOrderHeader.COH_Rush__c}"/>
+     </apex:pageBlockSectionItem>
+  </apex:pageBlockSection>
+   <apex:pageBlockButtons location="bottom">
+    <apex:commandButton value="Continue" action="{!saveChangeOrder}"/>
+     <apex:commandButton value="Cancel" action="{!cancel}" />
+    </apex:pageBlockButtons>
+     </apex:pageBlock>
+               <apex:pageBlock rendered="{!showChangeOrderInternal}">
+                 <apex:pageBlockSection title="Change Orders Pending">
+                  <apex:pageBlockTable value="{!changeorderInternal}" var="changeorders" style="width: 261%;">
+                 <apex:column headerValue="Change orders" >
+                  <apex:outputField value="{!changeorders.Name}"/>
+                 </apex:column>
+                      <apex:column headerValue="Change Requested By" >
+                  <apex:outputField value="{!changeorders.Change_Requested_By__c}"/>
+                 </apex:column>
+                  <apex:column headerValue="Status" >
+                  <apex:outputField value="{!changeorders.Status__c}"/>
+                 </apex:column>
+                 <apex:column headerValue="Modality" >
+                  <apex:outputField value="{!changeorders.COH_Modality__c}"/>
+                 </apex:column>
+                  </apex:pageBlockTable>
+                </apex:pageBlockSection> 
+                </apex:pageBlock>
+              </apex:outputPanel>
+    </apex:form>
+    <script type="text/javascript">
+var newWin=null;
+function openLookupPopup(name,id, objectName, fieldName, query, listofcolumns,orderBy)
+{ 
+var inid1value = "{!sidNumberId}";
+var innamevalue = "{!sidNumber}"; 
+//var inid1=document.getElementById("{!$Component.page1.formid.block1.sec1.item1.inputid}").value;
+//var inname=document.getElementById("{!$Component.page1.formid.block1.sec1.item1.inputname}").value;
+var inid1=inid1value;
+var inname=innamevalue;
+var sobjectName = objectName;
+var fieldName = fieldName;
+console.log('**1',inid1value); 
+console.log('**2',inid1value);
+console.log('**3',document.getElementById(name).value); 
+var sidnumberId = document.getElementById(name).value;
+//alert(document.getElementById("{!$Component.ChangeorderForm.hdrOutput.ChangeorderBlock.changeorder.inputname}").value);
+//var id = document.getElementById(id);
+var url="/apex/ChangeOrderlookupVF?namefield=" + name + "&idfield=" +id+"&parentid="+inid1+"&parentname="+document.getElementById(name).value+"&sObject="+sobjectName+"&fieldName="+fieldName+"&query="+query+"&listofcolumns="+listofcolumns+"&orderBy="+orderBy;
+newWin=window.open(url, 'Popup','height=500,width=600,left=100,top=100,resizable=no,scrollbars=yes,toolbar=no,status=no');
+if (window.focus)
+{
+newWin.focus();
+}
+ 
+return false;
+}
+ 
+function closeLookupPopup(element)
+{
+  console.log('Element:',element);
+  console.log('newWin:',newWin);
+if (null!=newWin)
+{
+newWin.close();
+changeOrd();
+}
+}
+
+ </script>
+</apex:page>

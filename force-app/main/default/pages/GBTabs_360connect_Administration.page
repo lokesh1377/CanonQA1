@@ -1,0 +1,29 @@
+<apex:page showHeader="true" sidebar="false" title="360connect Administration">
+	<GBLite:TabbedPageComponent pageAPIName="GBTabs_360connect_Administration" >
+	<GBLite:EmbedComponent baseGridUrl="{!$Page.GBLite__Grid}" />
+		<script>
+			var pageDefinition = {
+	"name": "360connect Administration",
+	"tabs": [
+		{
+			"name": "360 New User Requests",
+			"content": "{!gridPage}gname=360 New User Requests&sh=0&sfname=default",
+			"id": 1505513396294
+		},
+		{
+			"name": "360 Affiliations",
+			"content": "{!gridPage}gname=360 Affiliations&sh=0&sfname=default",
+			"id": 1505513462623
+		}
+	],
+	"id": 1505513396293,
+	"description": "",
+	"globalButtons": true,
+	"object": "0",
+	"height": "",
+	"showHeader": true,
+	"showSidebar": false
+};
+		</script>
+	</GBLite:TabbedPageComponent>
+</apex:page>

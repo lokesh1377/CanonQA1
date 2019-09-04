@@ -1,0 +1,2 @@
+<apex:page standardController="TAMS_Order_Process_Approval__c" recordSetVar="a"
+action="{!URLFOR($Action.TAMS_Order_Process_Approval__c.List,$ObjectType.TAMS_Order_Process_Approval__c)}" />

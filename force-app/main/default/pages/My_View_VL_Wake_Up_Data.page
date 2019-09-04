@@ -1,0 +1,2 @@
+<apex:page standardController="VL_Wake_Up_Data__c" recordSetVar="a"
+action="{!URLFOR($Action.VL_Wake_Up_Data__c.List,$ObjectType.VL_Wake_Up_Data__c)}" />

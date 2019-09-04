@@ -1,0 +1,53 @@
+<aura:component controller="Tams360OppFromLeadExt" implements="force:appHostable">
+	<aura:registerEvent name="getLeadsEvent" type="c:Show360AssistLeads"/>    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="accountName" type="String"/>
+    <aura:attribute name="status" type="String" />
+    <aura:attribute name="modality" type="String"/>
+    <aura:attribute name="leadName" type="String"/>
+    <aura:attribute name="sortBy" type="String" default="Rank"/>
+    <aura:attribute name="rank" type="String"/>
+    <div>
+        <div class="row">
+	    	<lightning:input name="accountName" label="Account Name" value="{!v.accountName}"/>
+        </div>
+        <div class="row">
+	    	<lightning:input name="leadName" label="Lead Name" value="{!v.leadName}"/>
+        </div>        
+        <div class="row">
+	        <ui:inputSelect aura:id="rank" class="Single" label="Rank" value="{!v.rank}">
+                <ui:inputSelectOption text="All"/>
+                <ui:inputSelectOption text="1-Hot"/>
+                <ui:inputSelectOption text="2-Warm"/>
+                <ui:inputSelectOption text="3-Cool" />
+			</ui:inputSelect>
+        </div>                        
+        <div class="row">
+	        <ui:inputSelect aura:id="status" multiple="true" class="multiple" label="Status" value="{!v.status}" required="true">
+                <ui:inputSelectOption text="Open" value="true"/>
+                <ui:inputSelectOption text="Working" value="true" />
+                <ui:inputSelectOption text="Closed - Not Converted"/>
+			</ui:inputSelect>
+        </div>
+        <div class="row">
+	        <ui:inputSelect aura:id="modality" class="Single" label="Modality" value="{!v.modality}">
+                <ui:inputSelectOption text="All"/>
+                <ui:inputSelectOption text="CT"/>
+                <ui:inputSelectOption text="MR"/>
+                <ui:inputSelectOption text="UL" />
+                <ui:inputSelectOption text="VL" />
+                <ui:inputSelectOption text="XR" />
+			</ui:inputSelect>
+        </div>        
+        <div class="row">
+	        <ui:inputSelect aura:id="sortBy" class="Single" label="Sort By" value="{!v.sortBy}" required="true">
+                <ui:inputSelectOption text="Rank"/>
+                <ui:inputSelectOption text="Status"/>
+                <ui:inputSelectOption text="Modality" />
+                <ui:inputSelectOption text="Account Name" />
+                <ui:inputSelectOption text="Lead Name" />
+			</ui:inputSelect>
+        </div>                
+        <lightning:Button label="Search" onclick="{!c.searchLeadsJS}" />
+    </div>    
+</aura:component>

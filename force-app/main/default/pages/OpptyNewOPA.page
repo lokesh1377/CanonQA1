@@ -1,0 +1,183 @@
+<!-- ********************************************************
+        Author: Lokesh Tigulla         
+        Purpose: This page is for Creating New OPA through Opporunity related list.        
+        1.0 - Lokesh Tigulla - 06/12/2019 - Created
+********************************************************** -->
+<apex:page standardController="Opportunity" extensions="OpptyNewOPACTRL" showHeader="true" sidebar="true" tabStyle="TAMS_Order_Process_Approval__c" lightningStylesheets="true">
+<apex:sectionHeader title="Order Process Approval Edit" subtitle="New Order Process Approval"/>
+<apex:form >
+  <apex:pageMessages />
+  <apex:pageblock title="Order Process Approval Edit">
+   <apex:pageBlockButtons >
+                 <apex:commandButton action="{!save}" value="Save"/>
+                 <apex:commandButton action="{!saveNew}" value="Save&New"/>
+                    <apex:commandButton action="{!cancel}" value="Cancel" style="margin-right: 69%;"/>  
+                </apex:pageBlockButtons>
+  <apex:pageBlockSection title="Information" columns="2">
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Opportunity"/>
+   <apex:outputField value="{!oppty.Name}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Status"/>
+   <apex:inputField value="{!opa.Status__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Account"/>
+   <apex:outputField value="{!oppty.AccountId}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Original Booking SID/OA"/>
+   <apex:inputField value="{!opa.Original_Booking_SID__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="TAMS Quote"/>
+   <apex:inputField value="{!opa.TAMS_Quote__c}" required="true" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Order Number"/>
+   <apex:inputField value="{!opa.Order_Number__c}" />
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="PBOM"/>
+   <apex:outputField value="{!oppty.PBOM__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+  <apex:outputText value="POP Service Contract"/>
+   <apex:inputField value="{!opa.POP_Service_Contract__c}" />
+  </apex:pageblockSectionItem>
+    <apex:pageblockSectionItem >
+   <apex:outputText value="Sales Price"/>
+   <apex:inputField value="{!oppty.Booking_Amount__c}" required="true"/>
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="Multi-System Deal"/>
+   <apex:inputField value="{!opa.Multi_System_Deal__c}" />
+  </apex:pageblockSectionItem>
+  </apex:pageBlockSection>
+  <apex:pageBlockSection title="Comments" columns="1">
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Field Comments"/>
+   <apex:inputField value="{!opa.Field_Comments__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="If Multi-System,list SIDs"/>
+   <apex:inputField value="{!opa.If_Multi_System_list_opportunity_SIDs__c}" />
+  </apex:pageblockSectionItem>
+ <apex:pageblockSectionItem >
+   <apex:outputText value="Internal Comments"/>
+   <apex:inputField value="{!opa.Internal_Comments__c}"/>
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="BU Reviewed"/>
+   <apex:inputField value="{!opa.BU_Reviewed__c}"/>
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="BU Review Comments"/>
+   <apex:inputField value="{!opa.BU_Review_Comments__c}"/>
+  </apex:pageblockSectionItem>
+  </apex:pageBlockSection>
+  
+   <apex:pageBlockSection title="Customer Information" columns="2">
+   <apex:pageblockSectionItem >
+   <apex:outputText value="Billing Account#"/>
+   <apex:inputField value="{!opa.Billing_Account__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Payment Method"/>
+   <apex:inputField value="{!opa.Payment_Method__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Shipping Account#"/>
+   <apex:inputField value="{!opa.Shipping_Account__c}" />
+  </apex:pageblockSectionItem> 
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Lease Entity"/>
+   <apex:inputField value="{!opa.Lease_Entity__c}" />
+  </apex:pageblockSectionItem> 
+   </apex:pageBlockSection> 
+   <apex:pageBlockSection title="Sales Credit" columns="2">
+   <apex:pageblockSectionItem >
+   <apex:outputText value="Account Executive #1"/>
+   <apex:inputField value="{!oppty.OwnerId}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Zone Business Mgr #1"/>
+   <apex:inputField value="{!oppty.ZBM__c}" />
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="AE1 Zone"/>
+   <apex:inputField value="{!acc.Zone_TAMS__c}" />
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="ZBM1 Zone"/>
+   <apex:inputField value="{!acc.Zone_TAMS__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="AE1 Sales CC"/>
+   <apex:inputText value="{!acc.Sales_CC__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="ZBM1 Sales CC"/>
+   <apex:inputText value="{!acc.Sales_CC__c}" />
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="AE1 Service CC"/>
+   <apex:inputText value="{!acc.TAMS_Service_Territory_Name__c}" />
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="ZBM1 Service CC"/>
+   <apex:inputText value="{!acc.TAMS_Service_Territory_Name__c}" />
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="AE1 Booking %"/>
+   <apex:inputField value="{!opa.AE1_Booking__c}" />
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="ZBM1 Booking %"/>
+   <apex:inputField value="{!opa.ZBM1_Booking__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Account Executive #2"/>
+   <apex:inputField value="{!opa.Account_Executive_2__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="Zone Business Mgr #2"/>
+   <apex:inputField value="{!opa.Zone_Business_Mgr_2__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="AE2 Zone"/>
+   <apex:inputField value="{!opa.AE2_Zone__c}" />
+  </apex:pageblockSectionItem>
+   <apex:pageblockSectionItem >
+   <apex:outputText value="ZBM2 Zone"/>
+   <apex:inputField value="{!opa.ZBM2_Zone__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="AE2 Sales CC"/>
+   <apex:inputField value="{!opa.AE2_Sales_CC__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="ZBM2 Sales CC"/>
+   <apex:inputField value="{!opa.ZBM2_Sales_CC__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="AE2 Service CC"/>
+   <apex:inputField value="{!opa.AE2_Service_CC__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="ZBM2 Service CC"/>
+   <apex:inputField value="{!opa.ZBM2_Service_CC__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="AE2 Booking %"/>
+   <apex:inputText value="{!opa.AE2_Booking__c}" />
+  </apex:pageblockSectionItem>
+  <apex:pageblockSectionItem >
+   <apex:outputText value="ZBM2 Booking %"/>
+   <apex:inputText value="{!opa.ZBM2_Booking__c}" />
+  </apex:pageblockSectionItem>
+     </apex:pageBlockSection>
+  </apex:pageblock>
+  </apex:form>
+</apex:page>

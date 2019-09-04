@@ -1,0 +1,132 @@
+<!--*********************************************************
+        Author: Lokesh Tigulla        
+        Purpose: This VisualForce Page is for Delete Item in Change Order Lines on Change Order.        
+        1.0 -                -            - Created
+        1.1 - Lokesh Tigulla - 02/19/2019 - updated
+        1.2 - Lokesh Tigulla - 03/29/2019 - Updated(Enabled Visualforce pages to lightning compatibility)
+**********************************************************-->
+<apex:page standardController="TAMS_ROA__c"  extensions="ChangeOrderDeleteActionCTRL" showHeader="true" sidebar="true" lightningStylesheets="true">
+<apex:form id="DeleteItemId"> 
+    <apex:pageMessages />
+    <apex:sectionHeader title="Delete items from Change Order">
+      <apex:commandLink action="{!cancel}" value="Back to Change Order" id="theCommandLink"/>
+        <apex:pageBlock >
+            <apex:pageBlockSection columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Change Order #"/>
+                    <apex:outputField value="{!roa.Name}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Customer Name"/>
+                    <apex:outputField value="{!roa.Account__c}" />
+                </apex:pageBlockSectionItem>                 
+                <apex:pageBlockSectionItem >
+                 <apex:outputLabel value="Order Number"/> 
+                     <apex:selectList value="{!selectorders1}" multiselect="false" size="1">
+                        <apex:selectOptions value="{!ord}"/>
+                        <apex:actionSupport event="onchange" action="{!orderchange}" reRender="DeleteItemId"/>
+                     </apex:selectList>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="SID"/>
+                    <apex:outputField value="{!roa.Change_Order_SID__c}" />
+                </apex:pageBlockSectionItem>
+                   <apex:pageBlockSectionItem >
+                    <apex:outputText value="Modality"/>
+                   <apex:outputText value="{!modality}" /> 
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Booked Date"/>
+                   <apex:outputText value="{0,date,MM/dd/yyyy}"> 
+                      <apex:param value="{!orderBookedDate}" />
+                  </apex:outputText>
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Type"/>
+                   <apex:outputText value="{!orderType}" /> 
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Status"/>
+                   <apex:outputText value="{!orderStatus}" /> 
+                </apex:pageBlockSectionItem> 
+                 <apex:pageBlockSectionItem >
+                    <apex:outputText value="Order Booked Amount"/>
+                   <apex:outputText value="{0, Number, Currency}">
+                   <apex:param value="{!orderBookedAmount}"/>
+                   </apex:outputText>
+                </apex:pageBlockSectionItem>                 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:sectionHeader>
+    <apex:pageBlock title="Select items">
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!save}" value="Save" disabled="{!isEditable}"/>
+            <apex:commandButton action="{!cancel}" value="Cancel" style="margin-right: 69%;"/>
+        </apex:pageBlockButtons>        
+        <apex:pageBlockTable value="{!orderLines}" var="line" width="100%" >
+            <apex:column headerValue="Select">
+                <apex:facet name="header">
+                     <apex:actionRegion >
+                    <apex:inputCheckbox value="{!selectAll}" >
+                     <apex:actionSupport event="onclick" action="{!selectAll}" />  
+                    </apex:inputCheckbox> 
+                </apex:actionRegion>
+                  </apex:facet> 
+                <apex:actionRegion >
+                    <apex:inputCheckbox value="{!line.selected}" rendered="{!line.orderLine.Line_Number__c <>'1.1'}" >
+                        <apex:actionSupport event="onchange" action="{!checkboxChanged}">
+                        </apex:actionSupport>   
+                    </apex:inputCheckbox> 
+                </apex:actionRegion>              
+            </apex:column>      
+            <apex:column headerValue="Line #">
+                <apex:outputField value="{!line.orderLineMaster.Line_Number__c}" />
+            </apex:column>                                                                                              
+            <apex:column headerValue="Item Code">
+                <a href="#"  onclick="myFunction('{!baseUrl}/{!line["orderLineMaster.Ordered_Item__c"]}')">{!line['orderLineMaster.Ordered_Item__r.Name']}</a>
+            </apex:column>  
+            <apex:column headerValue="BTL">
+                <apex:outputField value="{!line.orderLineMaster.OLM_BTL__c}" />
+            </apex:column> 
+            <apex:column headerValue="Status">
+                <apex:outputField value="{!line.orderLineMaster.Status__c}" />
+            </apex:column> 
+            <apex:column headerValue="List Price">
+                <apex:outputField value="{!line.orderLineMaster.Item_List_Price__c}" />
+            </apex:column>
+            <apex:column headerValue="Selling Price" rendered="{!showSellingPrice}">
+                <apex:outputField value="{!line.orderLineMaster.Item_Selling_Price__c}" />
+            </apex:column> 
+             <apex:column headerValue="Item Cost">
+                <apex:outputField value="{!line.orderLineMaster.OLM_Ordered_Item_Cost__c}" />
+            </apex:column> 
+            <apex:column headerValue="Line Quantity">
+                <apex:outputField value="{!line.orderLineMaster.Quantity__c}" />
+            </apex:column>  
+            <apex:column headerValue="Delete Quantity">
+                <apex:inputText value="{!line.deleteQuantity}" rendered="{!line.selected}" style="max-width:50px"/>
+            </apex:column>  
+            <apex:column headerValue="New Selling Price" rendered="{!showSellingPrice}">
+                <apex:inputText value="{!line.newSellingPrice}" rendered="{!line.selected}"  style="max-width:75px" />
+            </apex:column>  
+            <!-- <apex:column headervalue="RMA?" rendered="{!showRMA}">
+               <apex:inputCheckbox value="{!line.rmaValue}" rendered="{!line.selected}"/>
+            </apex:column> -->
+            <apex:column headervalue="RMA?" rendered="{!showRMA}">
+               <apex:inputField value="{!line.changeOrderLine.COL_RMA__c}" rendered="{!line.selected}"/>
+            </apex:column>
+            <apex:column headervalue="Reason Code" rendered="{!showRMA}">
+               <apex:inputField value="{!line.changeOrderLine.COL_Reason_Code__c}" rendered="{!line.selected}"/>
+            </apex:column>
+             <apex:column headerValue="Comments">
+                <apex:inputField value="{!line.changeOrderLine.COL_Comments__c}" rendered="{!line.selected}"/>
+            </apex:column>    
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:form>
+<script>
+       function myFunction(recordId){
+        window.open(recordId,'_blank');
+       }
+   </script>    
+</apex:page>

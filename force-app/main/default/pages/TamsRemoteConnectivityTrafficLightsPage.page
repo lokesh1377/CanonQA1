@@ -1,0 +1,29 @@
+<apex:page standardController="Install_Base_TAMS__c" extensions="TamsRemoteConnectivityTrafficLights">
+<style>
+    .fewerMore { display: none;}
+    form, html {
+    background: white !important;
+    }
+</style>
+	<apex:pageBlock >
+		<apex:pageBlockSection columns="2" title="Remote Connectivity">
+			<apex:pageBlockSectionItem rendered="{!lightColor=='Green'}" >
+				<apex:image id="GreenLight" url="{!URLFOR($Resource.TamsTrafficeLightImages,'TrafficeLightImages/Green.png')}" rendered="{!lightColor=='Green'}" width="175" height="175"  />
+			</apex:pageBlockSectionItem>		
+			<apex:pageBlockSectionItem rendered="{!lightColor=='Red'}">
+				<apex:image id="RedLight" url="{!URLFOR($Resource.TamsTrafficeLightImages,'TrafficeLightImages/Red.png')}" rendered="{!lightColor=='Red'}" width="175" height="175" />
+			</apex:pageBlockSectionItem>		
+			<apex:pageBlockSectionItem rendered="{!lightColor=='Yellow'}">	
+				<apex:image id="YellowLight" url="{!URLFOR($Resource.TamsTrafficeLightImages,'TrafficeLightImages/Yellow.png')}" rendered="{!lightColor=='Yellow'}" width="175" height="175" />
+			</apex:pageBlockSectionItem>		
+			<apex:pageBlockSectionItem >	
+				<apex:image id="NoLight" url="{!URLFOR($Resource.TamsTrafficeLightImages,'TrafficeLightImages/NoLight.png')}" rendered="{!lightColor=='NoLight'}" width="175" height="175" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >	
+				<apex:image id="Legends" url="{!URLFOR($Resource.TamsTrafficeLightImages,'TrafficeLightImages/Legends.JPG')}" />
+			</apex:pageBlockSectionItem>			
+		</apex:pageBlockSection>	
+
+	</apex:pageBlock>				
+
+</apex:page>

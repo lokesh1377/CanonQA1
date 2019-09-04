@@ -1,0 +1,24 @@
+<apex:page Controller="ContractsDashBoardController" showheader="false" sidebar="false">
+  <apex:form >    
+  <table width="100%" bgcolor="#d9d9d9">
+    <tr>
+       <th class="headerRow  " scope="col">Contract <br> Name </br> </th>
+       <th class="headerRow  " scope="col">Nickname </th> 
+       <th class="headerRow  " scope="col">SID </th>
+       <th class="headerRow  " scope="col">Days to <br> Expire </br></th>
+    </tr>        
+    <tr>  
+      <apex:repeat value="{!SContract}" var="sc">  
+        <tr> 
+            <td> <a href="/00Oi00000066paE" target="_blank"> {!sc.Name} </a></td>
+            <td> <a href="/00Oi00000066paE" target="_blank"> {!sc.Nickname__c}</a></td>  
+            <td> <a href="/00Oi00000066paE" target="_blank"> {!sc.SID__c}</a></td>           
+            <td align="right">
+                <a href="/00Oi00000066paE" target="_blank"><apex:outputText value="{!sc.Days_to_Expire__c}" style="background:{!sc.DashBoard_Field_Color__c}"/></a>
+            </td>
+       </tr>                                               
+      </apex:repeat>
+    </tr>
+  </table>
+  </apex:form>
+</apex:page>

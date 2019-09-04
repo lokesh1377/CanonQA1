@@ -1,0 +1,24 @@
+<apex:component controller="sprQuotesTableController" access="global">
+  <apex:attribute name="SPRId" description="Current SPR Id." type="Id" assignTo="{!thisSprId}"/> 
+   
+      <table border="1">
+         <tr> 
+           <td><apex:outputText value="Quote #"/></td>
+           <td><apex:outputText value="Modality"/></td>           
+           <td><apex:outputText value="Approved Discount(%)"/></td>
+           <td><apex:outputText value="Approved Selling Price"/></td>
+           <td><apex:outputText value="SPR Comments"/></td>
+         </tr>
+        
+         <apex:repeat var="sprqot" value="{!sprQuotes}" id="theRepeat">
+         <tr>
+           <td><apex:outputText value="{!sprqot.Oracle_Quote__c}"/></td>
+           <td><apex:outputText value="{!sprqot.Modality_SPRQ__c}"/></td>
+           <td><apex:outputText value="{!sprqot.Approved_Discount__c}"/> </td>
+           <td><apex:outputText value="{!ROUND(sprqot.APPROVED_Selling_Price__c,0)}"/></td>
+           <td><apex:outputText value="{!sprqot.SPR_Comments__c}"/></td>         
+         </tr>
+         </apex:repeat>       
+      </table> 
+  
+</apex:component>

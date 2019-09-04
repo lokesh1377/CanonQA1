@@ -1,0 +1,195 @@
+<apex:page standardController="Opportunity" extensions="SortControllerAE" recordSetVar="unused" sidebar="false">
+<apex:includeScript value="{!$Resource.UtilJS}" />
+<apex:form >
+<apex:pageBlock >
+<apex:pageMessages />
+<apex:pageBlock >
+Note: All modifications made on the page will be lost if Return button is clicked without clicking the Save button first. 
+</apex:pageBlock>
+<apex:pageBlockButtons >
+ <apex:commandButton value="Save" action="{!SaveAll}"/>
+ <apex:commandButton value="Return" action="{!cancel}"/>
+</apex:pageBlockButtons>
+
+<apex:inputhidden id="fields" value="{!FieldList}" immediate="true"/>
+<script>
+ var eleFieldList = document.getElementById('{!$Component.fields}');
+ eleFieldList.value = 'Id, Name, AccountId, ZBM__c, ownerid,Modality_TAMS__c, SID_TAMS__c, Product_Group__c,Booking_Amount__c, CloseDate,';
+ eleFieldList.value += 'TAMS_AE_Probability__c,ZBM_Expected_Book_Date_TAMS__c,'; 
+ eleFieldList.value += 'TAMC__c,ZBM_Forecast_Category_TAMS__c,ZBM_Comments__c,ZVP_Expected_Book_Date_TAMS__c,ZBM_Lock_BkDt__c,ZVP_Forecast_Category_TAMS__c,PBOM__c';  
+</script>
+
+<apex:pageBlockTable value="{!Opps}" var="opp" id="table">
+
+<apex:column headerValue="Opportunity Name">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Opportunity Name{!IF(sortExpression=='Name',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Name" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+
+ <apex:outputLink value="/{!opp.Id}" id="theOpp">{!opp.Name}</apex:outputLink>
+</apex:column>
+
+<apex:column headerValue="SID">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="SID{!IF(sortExpression=='SID_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="SID_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+
+ <apex:outputField value="{!opp.SID_TAMS__c}"/>
+</apex:column>
+<apex:column headerValue="Account">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Account Name{!IF(sortExpression=='Account.Name',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Account.Name" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+ 
+ <apex:outputField value="{!opp.AccountId}"/>
+</apex:column>
+
+<apex:column headerValue="ZBM">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="ZBM{!IF(sortExpression=='ZBM__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="ZBM__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+ 
+ <apex:inputField value="{!opp.ZBM__c}"/>
+</apex:column>
+
+<apex:column headerValue="AE Name">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="AE Name{!IF(sortExpression=='Owner.Name',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Owner.Name" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+ 
+ <apex:outputField value="{!opp.ownerid}"/>
+</apex:column>
+
+<apex:column headerValue="Modality">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Modality{!IF(sortExpression=='Modality_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Modality_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+ 
+ <apex:outputField value="{!opp.Modality_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="Product Group">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Product Group{!IF(sortExpression=='Product_Group__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Product_Group__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+ <apex:outputField value="{!opp.Product_Group__c}"/>
+</apex:column>
+
+<apex:column headerValue="Booking Amount">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Booking Amount{!IF(sortExpression=='Booking_Amount__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="Booking_Amount__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+
+ <apex:inputField value="{!opp.Booking_Amount__c}"/>
+</apex:column>
+
+<apex:column headerValue="AE Book Date">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="AE Book Date{!IF(sortExpression=='closeDate',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="closeDate" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet>
+
+ <apex:outputField value="{!opp.closeDate}"/>
+</apex:column>
+
+<apex:column headerValue="AE Probability">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="AE Probability{!IF(sortExpression=='TAMS_AE_Probability__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="TAMS_AE_Probability__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+ 
+ <apex:outputField value="{!opp.TAMS_AE_Probability__c}"/>
+</apex:column>
+
+<apex:column headerValue="ZBM Book Date">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="ZBM Book Date{!IF(sortExpression=='ZBM_Expected_Book_Date_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="ZBM_Expected_Book_Date_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:inputField value="{!opp.ZBM_Expected_Book_Date_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="ZBM Lock BkDt">
+<apex:inputField value="{!opp.ZBM_Lock_BkDt__c}"/>
+</apex:column>
+
+<apex:column headerValue="TAMC">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="TAMC{!IF(sortExpression=='TAMC__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="TAMC__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+ 
+ <apex:inputField value="{!opp.TAMC__c}"/>
+</apex:column>
+
+<apex:column headerValue="ZBM Probability">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="ZBM Probability{!IF(sortExpression=='ZBM_Forecast_Category_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="ZBM_Forecast_Category_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:inputField value="{!opp.ZBM_Forecast_Category_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="ZBM Comments">
+ <apex:inputField value="{!opp.ZBM_Comments__c}"/>
+</apex:column>
+
+<apex:column headerValue="ZVP Book Date">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="ZVP Book Date{!IF(sortExpression=='ZVP_Expected_Book_Date_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="ZVP_Expected_Book_Date_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+ 
+ <apex:outputField value="{!opp.ZVP_Expected_Book_Date_TAMS__c}"/>
+</apex:column>
+
+<apex:column headerValue="ZVP Probability">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="ZVP Probability{!IF(sortExpression=='ZVP_Forecast_Category_TAMS__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="ZVP_Forecast_Category_TAMS__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:outputField value="{!opp.ZVP_Forecast_Category_TAMS__c}"/>
+</apex:column>
+<apex:column headerValue="Product">
+ <apex:facet name="header">   
+        <apex:commandLink action="{!ViewData}" value="Product{!IF(sortExpression=='PBOM__c',IF(sortDirection='ASC','▼','▲'),'')}">
+             <apex:param value="PBOM__c" name="column" assignTo="{!sortExpression}"></apex:param>
+     </apex:commandLink>
+ </apex:facet> 
+
+ <apex:outputField value="{!opp.PBOM__c}"/>
+</apex:column>
+
+</apex:pageBlockTable>
+</apex:pageBlock>
+
+</apex:form>
+
+
+</apex:page>

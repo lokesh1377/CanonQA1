@@ -1,0 +1,2 @@
+<apex:page standardController="account" recordSetVar="a"
+action="{!URLFOR($Action.Account.List,$ObjectType.Account)}" />

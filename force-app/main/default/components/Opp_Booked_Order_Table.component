@@ -1,0 +1,14 @@
+<apex:component controller="oppOrderTableController" access="global">
+  <apex:attribute name="OPPId" description="Current OPP Id." type="Id" assignTo="{!thisOppId}"/> 
+
+         <apex:repeat var="oppOrd" value="{!OppOrder}" id="theRepeat">
+           Booked Date    :<apex:outputText value="{0,date,MM/dd/yyyy}"> <apex:param value="{!oppOrd.TAMS_Booked_Date__c}"/> </apex:outputText>
+           <br/>Oracle Order # :<apex:outputText value="{!oppOrd.Oracle_Order_Number__c}"/>
+           <br/>For Order details,
+            <apex:outputLink value="{!LEFT($CurrentPage.URL,FIND('/',$CurrentPage.URL,9))+oppOrd.Id}"> 
+             click here
+            </apex:outputLink>
+           <br/> 
+         </apex:repeat>      
+  
+</apex:component>

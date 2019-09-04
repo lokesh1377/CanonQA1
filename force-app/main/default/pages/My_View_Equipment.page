@@ -1,0 +1,2 @@
+<apex:page standardController="Install_Base_TAMS__c" recordSetVar="a"
+action="{!URLFOR($Action.Install_Base_TAMS__c.List,$ObjectType.Install_Base_TAMS__c)}" />

@@ -1,0 +1,45 @@
+<apex:page showHeader="true" sidebar="false" title="Asset Mgmt Workspace">
+	<GBLite:TabbedPageComponent pageAPIName="GBTabs_Asset_Mgmt_Workspace" >
+	<GBLite:EmbedComponent baseGridUrl="{!$Page.GBLite__Grid}" />
+		<script>
+			var pageDefinition = {
+	"name": "Asset Mgmt Workspace",
+	"tabs": [
+		{
+			"name": "All Private Tasks",
+			"content": "/apex/gblite__Grid?gname=All AMS Activities",
+			"id": 1489689637340
+		},
+		{
+			"name": "Private Tasks w/ Account",
+			"content": "{!gridPage}gname=AMS Tasks by Related Account&sh=0&sfname=default",
+			"id": 1489528242264
+		},
+		{
+			"name": "Leads",
+			"content": "/apex/gblite__Grid?gname=AMS Leads",
+			"id": 1489593612615
+		},
+		{
+			"name": "BU Equipment Upgrades",
+			"content": "/apex/gblite__Grid?gname=AMS BU Equipment Upgrades",
+			"id": 1489530768847
+		},
+		{
+			"name": "BU Lead Upgrades",
+			"content": "/apex/gblite__Grid?gname=AMS BU Lead Upgrades",
+			"id": 1509056779083
+		}
+	],
+	"id": 1489528242264,
+	"description": "",
+	"globalButtons": true,
+	"object": "0",
+	"height": "650",
+	"showHeader": true,
+	"showSidebar": false,
+	"pageAPIName": "GBTabs_Asset_Mgmt_Workspace"
+};
+		</script>
+	</GBLite:TabbedPageComponent>
+</apex:page>

@@ -1,0 +1,34 @@
+<!--*********************************************************
+        Author:         
+        Purpose: This VisualForce Page is for displaying OFA on Change Order Page.        
+        1.0 - Lokesh Tigulla - 01/10/2019 - Created
+        1.1 - Lokesh Tigulla - 02/19/2019 - updated
+**********************************************************-->
+<apex:page standardController="TAMS_ROA__c" extensions="ChangeOrderOFAController" showHeader="true" sidebar="true"  lightningstylesheets="true">
+  <apex:form >
+      <apex:pageBlock >
+      <apex:pageBlockButtons location="top">
+       <!-- <apex:commandButton value="Save" action="{!save}" disabled="{!isEditable}"/> -->
+       <apex:commandButton value="Save" action="{!save}" oncomplete="javascript:window.top.location.href='/{!TAMS_ROA__c.Id}'" status="progress" disabled="{!isEditable}" style="margin-right: 73%;"/>
+             </apex:pageBlockButtons> 
+       <apex:pageBlockTable value="{!ofavalues}" var="ofa">
+       <apex:column headerValue="Included" >
+       <apex:inputCheckbox value="{!ofa['Included_OFA__c']}" disabled="{!isEditable}"/>
+     </apex:column>  
+      <apex:column headerValue="OFA" >
+          <a href="#"  onclick="myFunction('{!baseUrl}/{!ofa["OFA__c"]}')">{!ofa['OFA__r.name']}</a>
+     </apex:column>
+           <apex:repeat value="{!fields}" var="f" > 
+                    <apex:column headerValue="{!f.label}" >
+                        <apex:outputField value="{!ofa[f]}"/>
+                    </apex:column>
+                </apex:repeat>
+   </apex:pageBlockTable>
+ </apex:pageBlock>
+     </apex:form> 
+      <script>
+       function myFunction(recordId){
+        window.open(recordId,'_blank');
+       }
+      </script>
+</apex:page>

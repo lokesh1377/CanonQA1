@@ -1,0 +1,41 @@
+<apex:page standardController="Install_Base_TAMS__c" extensions="NewCaseInstallBaseExt" lightningstylesheets="true">
+ 
+ <style type="text/css">
+  .exceptionText{font-style:italic; 
+                 font-size:18px; 
+                 font-weight:bold; 
+                 text-align:center;
+                 color:red;}
+ </style>
+
+    <apex:form >
+        <apex:pageMessages />
+        <apex:pageBlock mode="edit">
+            <apex:pageBlockSection columns="1" rendered="{!DisplayFlag}">
+              <apex:outputLabel styleClass="exceptionText" value="**ATTENTION: You are submitting a case during non-peak hours, if you need immediate service for this request, please call TAMS ASSIST directly at (800) 521-1968."/> 
+            </apex:pageBlockSection>                     
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Next" action="{!SaveCase}"/>
+                <apex:commandButton value="Cancel" action="{!CancelCase}"/>
+            </apex:pageBlockButtons>           
+            <apex:pageBlockSection title="Case Type Selection" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Case Record Type" for="RecordTypes"/>
+                    <apex:selectList value="{!sRecordTypeId}" size="1" id="RecordTypes">
+                        <apex:selectOptions value="{!RecordTypes}"/>
+                    </apex:selectList>                    
+                </apex:pageBlockSectionItem>             
+            </apex:pageBlockSection>  
+            <apex:pageBlockSection title="Available Case Types" columns="2">
+                <apex:pageBlockTable value="{!lRecTypes}" var="rec_type">
+                    <apex:column headerValue="Case Type Name">
+                        <apex:outputText value="{!rec_type.sName}"/>
+                    </apex:column>
+                    <apex:column headerValue="Description">
+                        <apex:outputText value="{!rec_type.sDescription}"/>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

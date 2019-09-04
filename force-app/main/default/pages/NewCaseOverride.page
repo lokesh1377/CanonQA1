@@ -1,0 +1,16 @@
+<apex:page standardController="Case" extensions="NewCaseOverrideExt">
+	<apex:form >
+		<apex:pageMessages />
+		<apex:pageBlock mode="edit">
+			<apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Next" action="{!SaveCase}"/>
+                <apex:commandButton value="Cancel" action="{!CancelCase}"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection title="General Inquiry Type Selection" columns="2">
+				<apex:selectList value="{!oCase.RecordTypeId}" size="1" id="RecordTypes">
+					<apex:selectOptions value="{!RecordTypes}"/>
+				</apex:selectList>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

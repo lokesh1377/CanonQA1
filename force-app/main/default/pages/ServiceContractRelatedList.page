@@ -1,0 +1,26 @@
+<apex:page standardController="ServiceContract" extensions="ServiceContractRelatedList">
+<style>
+    .fewerMore { display: none;}
+    form, html {
+    background: white !important;
+    }
+</style>
+<apex:form >
+ <apex:pageMessages />
+<apex:pageblock >
+   <apex:pageBlockTable value="{!LineItems}" var="o">
+        <apex:column headerValue="Line Item Number">
+            <apex:outputLink target="_parent" value="/{!o.id}">{!o.Name}</apex:outputLink>
+        </apex:column>
+        <apex:column value="{!o.Description__c}"/>
+        <apex:column value="{!o.Product__c}"/>
+        
+       <apex:column value="{!o.Entitlement_Type__c}"></apex:column>
+       <apex:column value="{!o.Entitlement_Description__c}"/>
+       
+    </apex:pageBlockTable>
+   <apex:outputLabel value="No records to display" rendered="{!(ISNULL(LineItems))}" styleClass="noRowsHeader"></apex:outputLabel>
+ </apex:pageblock>
+
+</apex:form>
+</apex:page>

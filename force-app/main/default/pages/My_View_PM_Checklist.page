@@ -1,0 +1,2 @@
+<apex:page standardController="PM_Checklist__c" recordSetVar="a"
+action="{!URLFOR($Action.PM_Checklist__c.List,$ObjectType.PM_Checklist__c)}" />
